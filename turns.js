@@ -17,27 +17,41 @@ function requestTurn() {
     let cantTopics = parseInt(prompt('¿Cuántos temas desea consultar?'));
     let meetingTopics = "";
     let type = 0;
+    let trueOrFalse = true;
 
-// Consulto tipo de contribuyente para saber la duración del turno (1hs para R.I o sociedad, 30min para monotributista)
+// Consulto tipo de contribuyente para saber la duración del turno 
+// Duración: 1h para R.I o sociedad si tiene menos de 3 temas, 2hs si son más de 3 temas / 30 min. para monotributistas.
+ 
     do {
-        type = parseInt(prompt('Ingrese "1" si es responsable inscripto o sociedad, "2" si es monotributista'));
-    } while (type != 1 || type != 2);
 
-    if (type = 1) {
-        alert('Su turno tendrá una duración máxima de una hora');
-    } else {
-        alert('Su turno tendrá una duración máxima de media hora');
-    }
+        type = parseInt(prompt('Ingrese "1" si es responsable inscripto o sociedad, "2" si es monotributista'));
+        if (type == 1) {
+            if (cantTopics <= 3) {
+                alert('Su turno tendrá una duración máxima de una hora');
+                } else {
+                    alert('Su turno tendra una duración máxima de 2 horas');
+                }
+            trueOrFalse = false;
+        } else if (type == 2) {
+            alert('Su turno tendrá una duración máxima de media hora');
+            trueOrFalse = false;
+        } else {
+            trueOrFalse = true;
+            alert('Por favor ingrese una opción válida');
+            }
+    } while (trueOrFalse);
     
 // Asigno en una cadena de texto los temas de la reunión para poder organizar los tiempos y el profesional
-    for (i = 0; i < cantTopics; i++){
-        meetingTopics = meetingtopics + "\n" + prompt(`Ingrese generalizando en pocas palabras el tema ${i} de la reunión`);
+// Esto debería ser reemplazado por un vector con los temas
+
+    for (i = 1; i <= cantTopics; i++){
+        meetingTopics = meetingTopics + "Tema " + i + ": " + prompt(`Ingrese generalizando en pocas palabras el tema ${i} de la reunión`) + " / ";
         }
 
     const persona = new Person (name, tel, cantTopics, meetingTopics, type);
     console.log (persona);
-    alert('Su turno se ha generado correctamente, se coordinará telefónicamente el día de la reunión. ¡Muchas gracias!')
+    alert(name + ', tu turno se ha generado correctamente, se coordinará telefónicamente al número ' + tel + ' el día de la reunión \n¡Muchas gracias!')
 
-    //Devuelve un objeto persona
+    //Devuelve un objeto persona con la información del turno.
     return persona;
 }
