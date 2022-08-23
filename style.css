@@ -30,8 +30,16 @@ body {
     border-radius: 0.3em;
     padding: 1em;
     font-weight: 500;
-}
+    cursor: pointer;
+}   
 
 footer{
     font-size: 8pt;
+}
+
+.provisorio{
+    background-color: #0094BC;
+    color: white;
+    font-weight: 600;
+    margin-right: 0.3em;
 }
