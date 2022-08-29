@@ -15,7 +15,7 @@ function requestTurn() {
     let name = prompt('Ingrese su nombre');
     let tel = prompt('Ingrese su número de teléfono o celular');
     let cantTopics = parseInt(prompt('¿Cuántos temas desea consultar?'));
-    let meetingTopics = "";
+    let meetingTopics = [];
     let type = 0;
     let trueOrFalse = true;
 
@@ -41,17 +41,25 @@ function requestTurn() {
             }
     } while (trueOrFalse);
     
-// Asigno en una cadena de texto los temas de la reunión para poder organizar los tiempos y el profesional
-// Esto debería ser reemplazado por un vector con los temas
+// Asigno en un vector los temas de la reunión.
 
     for (i = 1; i <= cantTopics; i++){
-        meetingTopics = meetingTopics + "Tema " + i + ": " + prompt(`Ingrese generalizando en pocas palabras el tema ${i} de la reunión`) + " / ";
-        }
+        meetingTopics.push(prompt(`Ingrese en pocas palabras el tema ${i} de la reunión`));
+    }  
+    console.log(meetingTopics);
 
     const persona = new Person (name, tel, cantTopics, meetingTopics, type);
-    console.log (persona);
+    console.log(persona);
     alert(name + ', tu turno se ha generado correctamente, se coordinará telefónicamente al número ' + tel + ' el día de la reunión \n¡Muchas gracias!')
 
     //Devuelve un objeto persona con la información del turno.
     return persona;
+    }
+
+//Función provisoria, hay que reemplazarlo por uno que reciba una lista de turnos y agregue otro.
+function addTurn() {
+    let turnsList = [];
+    turnsList.push(requestTurn());
+    console.log(turnsList);
+    return turnsList;
 }
