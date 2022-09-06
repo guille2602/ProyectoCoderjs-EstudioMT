@@ -122,19 +122,26 @@ function findTurn(turnNro, turnsList) {
 // }
 
 function findTurnForUser(turnsList) {
-    let blackBackground = document.getElementById('blackBackground');
+    let blackBackground = document.getElementById("blackBackground");
     blackBackground.classList.remove("displayNone");
     const id = parseInt(prompt('Ingrese el número de turno a buscar'));
     const turn = findTurn(id, turnsList);
     if (turn) {
-        let text = `Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br>
+        let text = `<br>Hola ${turn.name}!</br><br>Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br>
         Los temas de la reunión son: ${turn.info.toString()}`;
         document.querySelector("#turnDetails").innerHTML = text;
     } else {
         document.querySelector("#turnDetails").innerHTML = "Turno no encontrado";
+        if (!document.querySelector("#addedButton")) {
+            let newTurnButton = document.createElement("button");
+            newTurnButton.innerHTML = "Consultar nuevamente";
+            newTurnButton.setAttribute("onclick","findTurnForUser(turnos)");
+            newTurnButton.setAttribute("id","addedButton")
+            document.querySelector("#turnButtons").append(newTurnButton);
+        }
     }
 }
 
-function hideInfo() {
-    document.querySelector("#blackBackground").classList.add("displayNone")
+function hideInfo(item) {
+    document.querySelector(item).classList.add("displayNone");
 }
