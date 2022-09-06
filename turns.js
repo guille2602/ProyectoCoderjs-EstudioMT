@@ -114,8 +114,27 @@ function findTurn(turnNro, turnsList) {
 
 // Consultar un turno
 
+// function findTurnForUser(turnsList) {
+//     const id = parseInt(prompt('Ingrese el número de turno a buscar'));
+//     const turn = findTurn(id, turnsList);
+//     alert(`Usted tiene turno para el día ${turn.date.getDate()}/${turn.date.getMonth()}/${turn.date.getFullYear()} 
+//     por los siguientes temas: ${turn.info.toString()}`)
+// }
+
 function findTurnForUser(turnsList) {
+    let blackBackground = document.getElementById('blackBackground');
+    blackBackground.classList.remove("displayNone");
     const id = parseInt(prompt('Ingrese el número de turno a buscar'));
     const turn = findTurn(id, turnsList);
-    alert(`Usted tiene turno para el día ${turn.date.getDate()}/${turn.date.getMonth()}/${turn.date.getFullYear()} por los siguientes temas: ${turn.info.toString()}`)
+    if (turn) {
+        let text = `Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br>
+        Los temas de la reunión son: ${turn.info.toString()}`;
+        document.querySelector("#turnDetails").innerHTML = text;
+    } else {
+        document.querySelector("#turnDetails").innerHTML = "Turno no encontrado";
+    }
+}
+
+function hideInfo() {
+    document.querySelector("#blackBackground").classList.add("displayNone")
 }

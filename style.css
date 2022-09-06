@@ -1,13 +1,86 @@
 @charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap');
 
 body {
     display:flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: auto;
+    margin: 0;
     height: 100vh;
+    font-family: roboto;
 }
+
+/*Estilo de la ventana flotante de turnos*/
+
+#blackBackground {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:fixed; 
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(20, 20, 20, 0.85);
+}
+
+.displayNone{
+    display:none !important;
+}
+
+#blackBackground h2 {
+    text-shadow: 0px 0px 5px rgba(48, 48, 48, 0.5);
+    padding-bottom: 1em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5pt;
+    text-align: center;
+    color: white;
+    font-size: 16pt;
+}
+
+#turnInfo{
+    padding-top: 1.5em;
+    display: flex;
+    flex-direction: column;
+    position:absolute;
+    margin-top: 32vh;
+    min-width: 400px;
+    max-width: 500px;
+    width: 40vw;
+    min-height: 22vh;
+    max-height: 25vh;
+    background-color: #0094BC;
+    border-radius: 1em;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+}
+
+#turnDetails {
+    font-family: Roboto;
+    color: white;
+    margin: 0 4em 2em 4em;
+    text-align: center;
+    line-height: 13pt;
+}
+
+#turnInfo button{
+    cursor: pointer;
+    width: 6vw;
+    height: 4vh;
+    border-style: solid;
+    border-radius: 1.2em;
+    border-color: white;
+    border-width: 0.2em;
+    color:white;
+    align-self: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 11pt;
+    background-color: rgba(0,0,0,0);
+    margin-bottom: 2em;
+}
+
+/*Estilo del resto del index*/
 
 #logo {
     height: 400px;
@@ -22,12 +95,11 @@ body {
 .access {
     margin-top: 0;
     margin-bottom: 4em;
-
 }
 
 .mainbutton {
     border-style: none;
-    border-radius: 0.3em;
+    border-radius: 0.75em;
     padding: 1em;
     font-weight: 500;
     cursor: pointer;
@@ -41,5 +113,5 @@ footer{
     background-color: #0094BC;
     color: white;
     font-weight: 600;
-    margin-right: 0.3em;
+    margin-right: 0.75em;
 }
