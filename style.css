@@ -1,6 +1,14 @@
 @charset "utf-8";
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap');
 
+:root{
+    --color-var1: #0094BC;
+}
+
+.displayNone{
+    display:none !important;
+}
+
 body {
     display:flex;
     flex-direction: column;
@@ -13,6 +21,70 @@ body {
 
 /*Estilo de la ventana flotante de turnos*/
 
+#turnForm{
+    padding: 4em 2em 2em 2em;
+    display:flex;
+    flex-direction: column;
+    position: absolute;
+    gap: 1em;
+    background-color: var(--color-var1);
+    width: 40vw;
+    min-height: 45vh;
+    height: auto;
+    border-radius: 2em;
+    min-width: 400px;
+    font-family: roboto;
+    box-shadow: 0 0 10px rgba(48, 48, 48, 0.2);
+}
+
+#turnForm label { 
+    color:white;
+    padding-left: 0.5em;
+    margin-right: 1em;
+    margin-bottom: 0.5em;
+}
+
+#turnForm select { 
+    border-style: none;
+    border-radius: 0.5em;
+    padding-left: 0.5em;
+    color: var(--color-var1);
+    background-color: aliceblue;
+}
+
+#camp2{
+    gap: 0.5em;
+    max-width: 10vw;
+}
+
+#camp2 *{
+    width: 6vw;
+    height: 24px;
+}
+
+#camp6{
+    display: flex;
+    flex-direction: column !important;
+    gap: 0.5em;
+    max-height: 100vh;
+}
+
+#turnForm div{
+    display:flex;
+    flex-direction: row;
+}
+
+#turnForm div input {
+    flex-grow: 4;
+    border-style: none;
+    border-radius: 0.5em;
+    height: 22px;
+    background-color: aliceblue;
+    padding-left: 1em;
+    color: var(--color-var1);
+    font-size: 10pt;
+}
+
 #blackBackground {
     display: flex;
     align-items: center;
@@ -22,10 +94,6 @@ body {
     width: 100vw;
     height: 100vh;
     background-color: rgba(20, 20, 20, 0.85);
-}
-
-.displayNone{
-    display:none !important;
 }
 
 #blackBackground h2 {
@@ -48,7 +116,7 @@ body {
     min-width: 400px;
     max-width: 500px;
     width: 40vw;
-    background-color: #0094BC;
+    background-color: var(--color-var1);
     border-radius: 1em;
     box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
 }
@@ -56,15 +124,21 @@ body {
 #turnDetails {
     font-family: Roboto;
     color: white;
-    margin: 2em 4em 2em 4em;
+    margin: 0em 4em 2em 4em;
     text-align: center;
-    line-height: 13pt;
+    align-self: center;
+    line-height: 16pt;
+}
+
+.turnButtons {
+    display:flex;
+    flex-direction: row !important;
 }
 
 #turnInfo div{
     margin-top: 0.5em;
     display:flex;
-    flex-direction:row;
+    flex-direction:column;
     justify-content: center;
     gap: 0.5em;
 }
@@ -85,6 +159,27 @@ body {
     font-weight: 500;
     font-size: 11pt;
     background-color: rgba(0,0,0,0);
+}
+
+#okCancel {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.5em;
+}
+
+.formButton {
+    margin: 1em 0 1em 0;
+    border-style: none;
+    border-radius: 0.5em;
+    height: 35px;
+    color: var(--color-var1);
+    font-size: 12pt;
+    font-weight: 400;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(48, 48, 48, 0.2);
+    cursor: pointer;
+    flex-grow: 1;
 }
 
 /*Estilo del resto del index*/

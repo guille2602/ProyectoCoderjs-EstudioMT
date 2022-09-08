@@ -1,5 +1,10 @@
 //Clase para crear un objeto persona con los datos del turno.
 
+function hideInfo(item, event) {
+    event.preventDefault();
+    document.querySelector(item).classList.add('displayNone');
+}
+
 class Person {
     constructor (name, phone, topics, info, type, active, turn, date) {
         this.name = name;
@@ -25,87 +30,50 @@ class Person {
     }
 }
 
-// Creo una función para solicitar una fecha para el turno
-
-    function askForDate(){
-        let day = parseInt(prompt('Ingrese un día para el turno'));
-        let month = parseInt(prompt('Ingrese el mes en formato numérico'));
-        let year = new Date();
-        year = year.getFullYear();
-        return new Date(year, month, day);
-    }
-
 //Creo un turno de prueba y una lista de turnos
 
-let julio = new Person ('Julio' , '1133969444' , 2 , ['Impuestos', 'Sueldos'], 2, true, 1, new Date( 2022,08,31,14,30))
+let julio = new Person ('Julio' , '1133969444' , 2 , ['Impuestos', 'Sueldos'], 2, true, 1, new Date(2022,08,31,14,30))
 let turnos = [];
 turnos.push(julio);
 
-//Función para asignar un turno a una persona
+//Función para asignar un turno a una persona (06/09/2022 - Reemplazado prompt por formulario)
 
 function requestTurn() {
-
-    let name = prompt('Ingrese su nombre');
-    let tel = prompt('Ingrese su número de teléfono o celular');
-    let cantTopics = parseInt(prompt('¿Cuántos temas desea consultar?'));
+    document.querySelector('#turnForm').classList.remove('displayNone');
+    let name = document.querySelector('#name').value;
+    let tel = document.querySelector('#tel').value;
+    let cantTopics = document.querySelector('#cantTopics').value;
     let meetingTopics = [];
-    let type = 0;
-    let trueOrFalse = true;
-
-    // Consulto tipo de contribuyente para saber la duración del turno 
- 
-    do {
-        type = parseInt(prompt('Ingrese "1" si es responsable inscripto o sociedad, "2" si es monotributista'));
-        if (type == 1) {
-        // Duración de turnos para responsables insriptos o sociedades.
-            if (cantTopics <= 3) {
-                alert('Su turno tendrá una duración máxima de una hora');
-                } else {
-                    alert('Su turno tendra una duración máxima de 2 horas');
-                }
-            trueOrFalse = false;
-        //Duración de turnos para monotributistas.
-        } else if (type == 2) {
-            alert('Su turno tendrá una duración máxima de media hora');
-            trueOrFalse = false;
-        } else {
-            trueOrFalse = true;
-            alert('Por favor ingrese una opción válida');
-            }
-    } while (trueOrFalse);
-    
-    // Asigno en un vector los temas de la reunión.
-
-    for (i = 1; i <= cantTopics; i++){
-        meetingTopics.push(prompt(`Ingrese en pocas palabras el tema ${i} de la reunión`));
-    }  
-    console.log(meetingTopics);
-
-    // Solicito un día para la reunión
-
-    let dateImput = askForDate();
-
-    // Creo el objeto persona con los datos obtenidos.
-
-    let persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 1, dateImput);
-    console.log(persona);
-    alert(name + ', tu turno se ha generado correctamente, se coordinará telefónicamente al número ' + tel + 
-    ' el horario de la reunión \n¡Muchas gracias!')
+    for (i = 1; i <= cantTopics; i++) {
+        let topic = document.querySelector(`#tema${i}`).value;
+        meetingTopics.push(topic);
+    }
+    let type = document.querySelector('#type').value;
+    let day = document.querySelector('#day').value;
+    let month = document.querySelector('#month').value;
+    let year = document.querySelector('#year').value;
+    let schedule = document.querySelector('#schedule').value;
+    let date = new Date(year, month, day, schedule, 00);
+    const persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 0, date);
+    console.log(persona); 
     return persona;
 }
 
 //Función que agrega el turno al array de turnos.
 
-function addTurn(turnsList) {
-    turnsList.push(requestTurn());
-    const turnID = turnsList.length;
-    turnsList[turnsList.length - 1].assignTurnId(turnID);
-    console.log(turnsList);
-    alert(`Su número de turno es ${turnID}`);
-    return turnsList;
+function addTurn(turnsList, e) {
+    if (!isEmptyForm()) {
+        turnsList.push(requestTurn());
+        const turnID = turnsList.length;
+        turnsList[turnsList.length - 1].assignTurnId(turnID);
+        console.log(turnsList);
+        alert(`Su número de turno es ${turnID}`);
+        hideInfo('#turnForm', e);
+        return turnsList;
+    } else {alert('Por favor completa todos los datos del formulario')}
 }
 
-//Busca un turno por número de turno.
+// //Busca un turno por número de turno.
 
 function findTurn(turnNro, turnsList) {
     const found = turnsList.find((turno) => turno.turn == turnNro);
@@ -114,24 +82,25 @@ function findTurn(turnNro, turnsList) {
 
 // Consultar un turno
 
-// function findTurnForUser(turnsList) {
-//     const id = parseInt(prompt('Ingrese el número de turno a buscar'));
-//     const turn = findTurn(id, turnsList);
-//     alert(`Usted tiene turno para el día ${turn.date.getDate()}/${turn.date.getMonth()}/${turn.date.getFullYear()} 
-//     por los siguientes temas: ${turn.info.toString()}`)
-// }
-
 function findTurnForUser(turnsList) {
     let blackBackground = document.getElementById("blackBackground");
     blackBackground.classList.remove("displayNone");
     const id = parseInt(prompt('Ingrese el número de turno a buscar'));
     const turn = findTurn(id, turnsList);
     if (turn) {
+
+        let duration = "";
+        if (turn.type = 2) {
+            duration = "media hora";}
+        else {
+            duration = "una hora"}
+
         let text = `<br>Hola ${turn.name}!</br><br>Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br>
-        Los temas de la reunión son: ${turn.info.toString()}`;
+        Los temas de la reunión son: ${turn.info.toString()} <br>
+        La duración máxima de la reunión es de ${duration}`;
         document.querySelector("#turnDetails").innerHTML = text;
     } else {
-        document.querySelector("#turnDetails").innerHTML = "Turno no encontrado";
+        document.querySelector("#turnDetails").innerHTML = "<br>Turno no encontrado";
         if (!document.querySelector("#addedButton")) {
             let newTurnButton = document.createElement("button");
             newTurnButton.innerHTML = "Consultar nuevamente";
@@ -142,6 +111,42 @@ function findTurnForUser(turnsList) {
     }
 }
 
-function hideInfo(item) {
-    document.querySelector(item).classList.add("displayNone");
+function generateTopicCamps() {
+    document.querySelector('#camp6').innerHTML = ""
+    let cantCamps = document.getElementById('cantTopics').value;
+    for (i = 1 ; i <= cantCamps; i++){
+        const newLabel = document.createElement("label");
+            newLabel.setAttribute("for",`tema${i}`);
+            newLabel.innerHTML = `Ingrese tema ${i}`;
+            document.querySelector('#camp6').append(newLabel);
+        const newImput = document.createElement("input");
+            newImput.setAttribute("type","text");
+            newImput.setAttribute("id",`tema${i}`);
+            newImput.setAttribute("name",`tema${i}`)
+            document.querySelector('#camp6').append(newImput);
+    }
+}
+
+let cantTemas = document.querySelector('#cantTopics');
+cantTemas.addEventListener('input', () => generateTopicCamps());
+
+//Para evitar que Enter envie el formulario
+let formIntroEvent = document.querySelector('#turnForm');
+formIntroEvent.addEventListener('keypress', (event) => {
+    if (event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+      }
+});
+
+function isEmptyForm () {
+    let name = document.querySelector('#name').value;
+    let tel = document.querySelector('#tel').value;
+    let cantTopics = document.querySelector('#cantTopics').value;
+    let day = document.querySelector('#day').value;
+    let month = document.querySelector('#month').value;
+    let year = document.querySelector('#year').value;
+    if (name == "" || tel == ""  || cantTopics == "0" || day == "" || month == "" || year == "") {
+        return true}
+        else {return false}
 }

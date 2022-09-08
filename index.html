@@ -8,7 +8,60 @@
     <title>Estudio Contable MT - Impositivo, laboral y societario</title>
 </head>
 <body>
-    <!-- Sección donde va a ir el logo del estudio-->
+
+    <form id="turnForm" class="displayNone">
+        <div id="camp1" class="dataForm">
+            <label for="nameForm">Nombre</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div id="camp2">
+            <label for="day" class="dataForm">Ingrese fecha</label>
+            <input type="text" id="day" name="day" placeholder="dd" requireds>
+            <input type="text" id="month" name="month" placeholder="mm"required>
+            <input type="text" id="year" name="year" placeholder="aaaa"required>
+            <select id="schedule" name="schedule" required>
+                <option value="9">9:00</option>
+                <option value="10">10:00</option>
+                <option value="11">11:00</option>
+                <option value="12">12:00</option>
+                <option value="13">13:00</option>
+                <option value="14">14:00</option>
+                <option value="15">15:00</option>
+                <option value="16">16:00</option>
+            </select>
+        </div>
+        <div id="camp3">
+            <label for="tel" class="dataForm">Número de teléfono</label>
+            <input type="text" id="tel" name="tel" required>
+        </div>
+        <div id="camp4">
+            <label for="type">Tipo de contribuyente</label>
+            <select id="type" name="type" required>
+                <option value="1">Responsable Inscripto</option>
+                <option value="2">Monotributista</option>
+            </select>
+        </div>
+        <div id="camp5">
+            <label for="cantTopics">¿Cuántos temas desea consultar?</label>
+            <select type="number" id="cantTopics" name="cantTopics" onchange="" required>
+                <option value="" selected disabled hidden>(Seleccionar)</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+        </div>
+        <div id="camp6">
+        <!-- Acá se van a colocar los campos de temas por medio de javascript -->
+        </div>
+        <div id="okCancel">
+            <button id="submitButton" class="formButton" type="submit" onclick="addTurn(turnos, event)">Enviar</button>
+            <button id="cancel" class="formButton"onclick="hideInfo('#turnForm', event)">Cancelar</button>
+        </div>    
+    </form>
+
     <img id="logo" src="./logo.png">
     <div class="access">
         <a href="#">Ingresar a la web</a>
@@ -17,7 +70,8 @@
         <!-- Turnos, cotizador y scripts correspondientes-->
         <script src="./quoter.js"></script>
         <script src="./turns.js"></script>
-        <button class="mainbutton provisorio"  onclick="addTurn(turnos)">Pedir un turno</button>
+        <button class="mainbutton provisorio"  onclick="document.querySelector('#turnForm').classList.remove('displayNone')">
+        Pedir un turno</button>
         <button class="mainbutton provisorio"  onclick="findTurnForUser(turnos)">Consultar un turno</button>
         <button class="mainbutton" onclick="">Cotizar servicio</button>
     </div>
@@ -25,8 +79,8 @@
         <div id="turnInfo">
             <h2>INFORMACIÓN DEL TURNO</h2>
             <p id="turnDetails"></p>
-            <div id="turnButtons">
-                <button onclick="hideInfo('#blackBackground')">OK</button>
+            <div id="turnButtons" class="turnButtons">
+                <button onclick="hideInfo('#blackBackground', event)">OK</button>
             </div>
         </div>
 
