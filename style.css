@@ -2,8 +2,107 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap');
 
 :root{
-    --color-var1: #0094BC;
+    --color-var1: rgb(0, 148, 188);
 }
+
+#colourbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    background-color: var(--color-var1);
+    width: 100vw;
+    height: 5vh;
+    margin-top: 0;
+    padding-right: 1vw;
+    position:absolute;
+    top: 0px;
+}
+
+#loginSection button{
+    background-color: none;
+    color: none;
+}
+
+#loginInput{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+#loginInput input{
+    border-radius: 0.5em;
+    border-style: none;
+    background-color: rgb(212, 236, 244);
+    font-weight:500;
+    font-family: roboto;
+    padding-left: 0.5em;
+}
+
+#loginInput label{
+    padding-left: 0.5em;
+}
+
+/****Red Infobar CSS****/
+
+#infobar {
+    background-color: #dc4c23;
+    min-height: 60px;
+    min-width: 100vw;
+    position: absolute;
+    top: 5vh;
+    display:flex;
+    flex-direction: row;
+    gap: 1em;
+    padding: 0.7em;
+    padding-left: 2em;
+    flex-wrap: wrap;
+}
+
+#infobar h2 {
+    text-align: center;
+    justify-self: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    font-family: roboto;
+    margin: 0.3em 2em 0 0;
+}
+
+#infobar div{
+    border-style: solid;
+    border-color: white;
+    border-width: 2px;
+    border-radius: 0.7em;
+    padding: 0.5em;
+}
+
+#infobar div h3 {
+    font-size: 12pt;
+    font-family: roboto;
+    font-weight: 600;
+    color: white;
+    justify-content: center;
+    margin:0;
+    }
+
+    #infobar div p {
+        font-size: 11pt;
+        font-family: roboto;
+        font-weight: 400;
+        color: white;
+        text-justify: center;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        }
+
+.vencim-table{
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+}
+
+/****index CSS****/
 
 .displayNone{
     display:none !important;
@@ -21,7 +120,7 @@ body {
 
 /*Estilo de la ventana flotante de turnos*/
 
-#turnForm{
+#turnForm {
     padding: 4em 2em 2em 2em;
     display:flex;
     flex-direction: column;
@@ -202,7 +301,7 @@ body {
 .mainbutton {
     border-style: none;
     border-radius: 0.75em;
-    padding: 1em;
+    padding: 0.7em;
     font-weight: 500;
     cursor: pointer;
 }   
