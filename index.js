@@ -175,11 +175,13 @@ function loadCalendar(){
 
   };
 
-
-//Función para desloguearse ********FALTA TERMINAR********
+//Función para desloguearse
 
 function logout(event) {
   event.preventDefault();
   localStorage.removeItem('userInformation')
   document.location.reload();
 }
+
+localStorage.getItem("userInformation")? showredBar(): null;
+localStorage.getItem("userInformation")? hideloginButons(): null;
