@@ -30,7 +30,7 @@
             </button>
             <!--Esto se reemplaza con el usuario logueado, hay que agregar función para agregar vencimientos-->
             <button 
-                id="loggedUser" type="button" class="mainbutton provisorio displayNone" onclick="showRedBar()">
+                id="loggedUser" type="button" class="mainbutton provisorio displayNone" onclick="logout(event)">
                 UserName
             </button>
         </div>
@@ -40,20 +40,20 @@
     <div id="infobar" class="displayNone">
         <h2>Mis vencimientos</h2>
         <div id="autonomTable" class="vencim-table displayNone">
-            <h3>Autónomos</h3>
-            <p>dd/mm/aaaa</p>
+            <h3 id="autonomTitle">Autónomos</h3>
+            <p id="autonomDate">dd/mm/aaaa</p>
         </div>
         <div id="sicossTable"class="vencim-table displayNone">
             <h3>Seguridad social</h3>
-            <p>dd/mm/aaaa</p>
+            <p id="sicossDate">dd/mm/aaaa</p>
         </div>
         <div id="ivaTable"class="vencim-table displayNone">
             <h3>IVA</h3>
-            <p>dd/mm/aaaa</p>
+            <p id="ivaDate">dd/mm/aaaa</p>
         </div>
         <div id="iibbTable" class="vencim-table displayNone">
             <h3>Ingresos brutos</h3>
-            <p>dd/mm/aaaa</p>
+            <p id="iibbDate">dd/mm/aaaa</p>
         </div>
     </div>
 

@@ -1,6 +1,19 @@
+//Vencimientos mensuales
+const vencimientosAutonomos = [05,05,05,05,06,06,06,07,07,07];
+const vencimientosMonotributo = 20;
+const vencimientosIVA = [19,19,20,20,21,21,22,22,23,23];
+const vencimientosSICOSS = [09,09,09,09,12,12,12,13,13,13];
+const vencimientosIIBBARBA = [19,20,21,22,23,26,27,28,29,30];
+const vencimientosIIBBAGIP = [12,12,13,13,14,14,15,15,16,16];
+const vencimientosCM = [15,15,15,16,16,16,19,19,20,20];
+const month = "09";
+const year = 2022;
+
+//Inicialización de variables globales
 const loginForm = document.querySelector('#loginInput');
 let userForm = document.querySelector('#registerInput');
 let userslist = []; 
+let userData = JSON.parse(localStorage.getItem('userInformation'));
 
 //Chequeo que los datos de registro se hayan completado
 userReg = userForm.regName;
@@ -8,7 +21,12 @@ userReg.addEventListener('change', () => checkIfCompleted());
 userCUIT = userForm.regCUIT;
 userCUIT.addEventListener('change', () => {checkIfCompleted()});
 userType = userForm.regType;
-userType.addEventListener('change', () => checkIfCompleted());
+userType.addEventListener('change', () => {checkIfCompleted(); hideIfNotMono()});
+
+function hideIfNotMono () {
+  document.getElementById('regType').value != 1? document.getElementById('iva').classList.add('displayNone'): 
+  document.getElementById('iva').classList.remove('displayNone');
+}
 
 //Constructor de contribuyente
 class Contribuyente {
@@ -65,6 +83,8 @@ function loginF(e){
   if (validation) {
     if (findAndValidateUser(userslist, user, password)) {
       createUserInLocalStorage(userslist, user);
+      // let userData = JSON.parse(localStorage.getItem('userInformation'))
+      hideloginButons();
       showredBar();
     } else {
       alert('Usuario o contraseña incorrectos');
@@ -79,7 +99,6 @@ function createUserInLocalStorage(usersArray, cuit) {
   const found = usersArray.find((u) => u.cuit == cuit);
   const foundString = JSON.stringify(found);
   localStorage.setItem('userInformation',foundString);
-  hidelogginButons(found.name);
 }
 
 //Vacía el formulario de login
@@ -99,11 +118,12 @@ function findAndValidateUser(usersArray, cuit, password){
 }
 
 //Función para reemplazar los botones del header al loguearse
-function hidelogginButons(user) {
+function hideloginButons() {
   let btn = document.querySelector('#loginButton');
   btn.classList.add('displayNone');
   let usr = document.querySelector('#loggedUser');
-  usr.innerHTML = user;
+  usr.innerHTML = 'Salir';
+  // usr.innerHTML = userData.name;
   usr.classList.remove('displayNone')
   document.querySelector('#registerButton').classList.add('displayNone')
 }
@@ -113,8 +133,9 @@ function hidelogginButons(user) {
 //Función para mostrar la barra de vencimientos (redbar)
 
 function showredBar() {
-  document.getElementById('infobar').classList.remove('displayNone')
-  const userData = JSON.parse('userInformation');
+  let userData = JSON.parse(localStorage.getItem('userInformation'))
+  loadCalendar();
+  document.getElementById('infobar').classList.remove('displayNone');
   userData.autonom? 
   document.querySelector('#autonomTable').classList.remove('displayNone'): 
   document.querySelector('#autonomTable').classList.add('displayNone');
@@ -129,5 +150,36 @@ function showredBar() {
     document.querySelector('#sicossTable').classList.add('displayNone');
 }
 
-//Función para desloguearse
+//Adaptar tabla de vencimientos al contribuyente
 
+function loadCalendar(){
+    let userData = JSON.parse(localStorage.getItem('userInformation'))
+    const lastDigit = userData.cuit % 10;
+    const autonomTitle = document.getElementById('autonomTitle');
+    const autonomDate = document.getElementById('autonomDate');
+    userData.type == 1? autonomTitle.innerHTML = 'Autónomos' : autonomTitle.innerHTML = 'Monotributo';
+    userData.type == 1? 
+    autonomDate.innerHTML = `${vencimientosAutonomos[lastDigit]}/${month}/${year}` : 
+    autonomDate.innerHTML = `${vencimientosMonotributo}/${month}/${year}`;
+    
+    const iibbDate = document.getElementById('iibbDate');
+    if (userData.iibb == 1) { iibbDate.innerHTML = `${vencimientosIIBBARBA[lastDigit]}/${month}/${year}`};
+    if (userData.iibb == 2) { iibbDate.innerHTML = `${vencimientosIIBBAGIP[lastDigit]}/${month}/${year}`};
+    if (userData.iibb == 3) { iibbDate.innerHTML = `${vencimientosCM[lastDigit]}/${month}/${year}`};
+
+    const ivaDate = document.getElementById('ivaDate');
+    ivaDate.innerHTML = `${vencimientosIVA[lastDigit]}/${month}/${year}`
+    
+    const sicossDate = document.getElementById('sicossDate');
+    sicossDate.innerHTML = `${vencimientosSICOSS[lastDigit]}/${month}/${year}`
+
+  };
+
+
+//Función para desloguearse ********FALTA TERMINAR********
+
+function logout(event) {
+  event.preventDefault();
+  localStorage.removeItem('userInformation')
+  document.location.reload();
+}
