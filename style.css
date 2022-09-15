@@ -175,6 +175,7 @@ h3 {
     min-width: 400px;
     font-family: roboto;
     box-shadow: 0 0 10px rgba(48, 48, 48, 0.2);
+    margin-top: 10vh;
 }
 
 #turnForm label { 
