@@ -30,7 +30,7 @@
             </button>
             <!--Esto se reemplaza con el usuario logueado, hay que agregar función para agregar vencimientos-->
             <button 
-                id="loggedUser" type="button" class="mainbutton provisorio displayNone" onclick="">
+                id="loggedUser" type="button" class="mainbutton provisorio displayNone" onclick="showRedBar()">
                 UserName
             </button>
         </div>
@@ -72,13 +72,13 @@
                 <div class="modal-body">
 
                     <form id="loginInput">
-                        <label for="user">CUIT</label>
-                        <input id="user" name="user" type="number">
+                        <label for="cuit">CUIT</label>
+                        <input id="cuit" name="cuit" type="number" maxlength="11" required="">
                         <label for="password">Contraseña</label>
-                        <input id="password" name="password" type="password">
+                        <input id="password" name="password" type="password" required>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button id="loginSubmit" type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="loginF(event)">Ingresar</button>
+                            <button id="loginSubmit" type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="loginF(event)">Ingresar</button>
                         </div>
                     </form>
                 </div>
@@ -91,13 +91,61 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Iniciar sesión</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Registrarse</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
                     <form id="registerInput">
-
+                        <div class="flex-y">
+                            <label for="regName">Nombre completo</label>
+                            <input type="text" id="regName" name="regName">
+                        </div>
+                        <div class="flex-y">
+                            <label for="regCUIT" maxlength="11">CUIT (Sin guiones)</label>
+                            <input type="number" id="regCUIT" name="regCUIT">
+                        </div>
+                        <div class="flex-y">
+                            <label for="regPass" maxlength="11">Contraseña</label>
+                            <input type="password" id="regPass" name="regPass">
+                        </div>
+                        <div class="flex-x">
+                            <label for="regType">Condición ante el IVA</label>
+                            <select id="regType" name="regType">
+                                <option value="" selected disabled hidden>(Seleccionar)</option>
+                                <option value="1">Responsable Inscripto</option>
+                                <option value="2">Monotributista</option>
+                                <option value="3">Exento</option>
+                            </select>
+                        </div>
+                        <div id="impuestos" class="flex-y">
+                            <h4>Seleccione los vencimientos mensuales que desea visualizar</h4>
+                            <div id="impositivo" class="flex-x">
+                                <label for="regImp">Autónomos / Monotributo</label>
+                                <input type="checkbox" id="regImp" name="regImp">
+                            </div>
+                            <div id="sicoss" class="flex-x">
+                                <label for="regSegSoc">Seguridad social</label>
+                                <input type="checkbox" id="regSegSoc" name="regSueldos">
+                            </div>
+                            <div id="iva" class="flex-x">
+                                <label for="regIva">Impuesto al valor agregado (IVA)</label>
+                                <input type="checkbox" id="regIva" name="regIva">
+                            </div>
+                            <div id="iibb" class="flex-x">
+                                <label for="regIngresosBrutos">Ingresos brutos</label>
+                                <select id="regIngresosBrutos" name ="regIngresosBrutos" required>
+                                    <option value="" selected disabled hidden>(Seleccionar)</option>
+                                    <option value="1">ARBA</option>
+                                    <option value="2">AGIP</option>
+                                    <option value="3">Convenio multilateral</option>
+                                </select>
+                            </div> 
+                        </div>
+                        <div class="x-flex twobuttons">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button id="regSubmit" type="submit" class="btn btn-primary displayNone" data-bs-dismiss="modal" onclick="signUp(event)">Crear usuario</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -110,9 +158,9 @@
         </div>
         <div id="camp2">
             <label for="day" class="dataForm">Ingrese fecha</label>
-            <input type="text" id="day" name="day" placeholder="dd" requireds>
-            <input type="text" id="month" name="month" placeholder="mm"required>
-            <input type="text" id="year" name="year" placeholder="aaaa"required>
+            <input type="text" id="day" name="day" placeholder="dd" required>
+            <input type="text" id="month" name="month" placeholder="mm" required>
+            <input type="text" id="year" name="year" placeholder="aaaa" required>
             <select id="schedule" name="schedule" required>
                 <option value="9">9:00</option>
                 <option value="10">10:00</option>

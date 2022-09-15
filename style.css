@@ -5,6 +5,19 @@
     --color-var1: rgb(0, 148, 188);
 }
 
+body {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    font-family: roboto;
+}
+
+h3 {
+    font-family: roboto;
+    font-size: 10pt;
+}
 #colourbar{
     display: flex;
     flex-direction: row;
@@ -13,9 +26,7 @@
     width: 100vw;
     height: 5vh;
     margin-top: 0;
-    padding-right: 1vw;
-    position:absolute;
-    top: 0px;
+    padding-right: 1vw;;
 }
 
 #loginSection button{
@@ -42,14 +53,19 @@
     padding-left: 0.5em;
 }
 
+.twobuttons{
+    padding-top: 1.5em;
+    flex-grow: 4;
+}
+
 /****Red Infobar CSS****/
 
 #infobar {
     background-color: #dc4c23;
     min-height: 60px;
     min-width: 100vw;
-    position: absolute;
-    top: 5vh;
+    /* position: absolute;
+    top: 5vh; */
     display:flex;
     flex-direction: row;
     gap: 1em;
@@ -102,20 +118,45 @@
     gap: 1em;
 }
 
+#impuestos{
+    display: flex;
+    flex-direction: column;
+}
+
+#registerInput {
+    display: flex;
+    flex-direction: column;
+    font-family: roboto;
+}
+
+#registerInput h4 {
+    font-size: 12pt;
+    font-weight: 600;
+}
+
+.flex-y {
+    margin-top: 1em;
+    display:flex;
+    flex-direction:column;
+    gap: 0.5em;
+}
+
+.flex-x {
+    margin-top: 1em;
+    display:flex;
+    flex-direction:row;
+    gap: 0.5em;
+}
+
+#impuestos {
+    margin-top: 2em;
+    margin-bottom: 0;
+}
+
 /****index CSS****/
 
 .displayNone{
     display:none !important;
-}
-
-body {
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    height: 100vh;
-    font-family: roboto;
 }
 
 /*Estilo de la ventana flotante de turnos*/
