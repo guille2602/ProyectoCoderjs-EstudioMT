@@ -37,26 +37,22 @@
     </div>
 
     <!--La información de cada tabla será cargada en vectores-->
-    <div id="infobar">
+    <div id="infobar" class="displayNone">
         <h2>Mis vencimientos</h2>
-        <div class="vencim-table">
-            <h3>Impuesto 1</h3>
+        <div id="autonomTable" class="vencim-table displayNone">
+            <h3>Autónomos</h3>
             <p>dd/mm/aaaa</p>
         </div>
-        <div class="vencim-table">
-            <h3>Impuesto 2</h3>
+        <div id="sicossTable"class="vencim-table displayNone">
+            <h3>Seguridad social</h3>
             <p>dd/mm/aaaa</p>
         </div>
-        <div class="vencim-table">
-            <h3>Impuesto 3</h3>
+        <div id="ivaTable"class="vencim-table displayNone">
+            <h3>IVA</h3>
             <p>dd/mm/aaaa</p>
         </div>
-        <div class="vencim-table">
-            <h3>Impuesto 4</h3>
-            <p>dd/mm/aaaa</p>
-        </div>
-        <div class="vencim-table">
-            <h3>Impuesto 5</h3>
+        <div id="iibbTable" class="vencim-table displayNone">
+            <h3>Ingresos brutos</h3>
             <p>dd/mm/aaaa</p>
         </div>
     </div>
@@ -135,7 +131,7 @@
                             <div id="iibb" class="flex-x">
                                 <label for="regIngresosBrutos">Ingresos brutos</label>
                                 <select id="regIngresosBrutos" name ="regIngresosBrutos" required>
-                                    <option value="" selected disabled hidden>(Seleccionar)</option>
+                                    <option value="0" selected>(Seleccionar)</option>
                                     <option value="1">ARBA</option>
                                     <option value="2">AGIP</option>
                                     <option value="3">Convenio multilateral</option>
