@@ -163,9 +163,10 @@ function loadCalendar(){
     autonomDate.innerHTML = `${vencimientosMonotributo}/${month}/${year}`;
     
     const iibbDate = document.getElementById('iibbDate');
-    if (userData.iibb == 1) { iibbDate.innerHTML = `${vencimientosIIBBARBA[lastDigit]}/${month}/${year}`};
-    if (userData.iibb == 2) { iibbDate.innerHTML = `${vencimientosIIBBAGIP[lastDigit]}/${month}/${year}`};
-    if (userData.iibb == 3) { iibbDate.innerHTML = `${vencimientosCM[lastDigit]}/${month}/${year}`};
+    iibbDate.innerHTML = 
+    userData.iibb == 1 && `${vencimientosIIBBARBA[lastDigit]}/${month}/${year}` ||
+    userData.iibb == 2 && `${vencimientosIIBBAGIP[lastDigit]}/${month}/${year}` ||
+    userData.iibb == 3 &&  `${vencimientosCM[lastDigit]}/${month}/${year}`
 
     const ivaDate = document.getElementById('ivaDate');
     ivaDate.innerHTML = `${vencimientosIVA[lastDigit]}/${month}/${year}`

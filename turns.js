@@ -31,8 +31,9 @@ class Person {
 }
 
 //Creo un turno de prueba y una lista de turnos
-
-let julio = new Person ('Julio' , '1133969444' , 2 , ['Impuestos', 'Sueldos'], 2, true, 1, new Date(2022,08,31,14,30))
+let DateTime = luxon.DateTime;
+let dt = DateTime.local(2022,8,31,14,30);
+let julio = new Person ('Julio' , '1133969444' , 2 , ['Impuestos', 'Sueldos'], 2, true, 1, dt);
 let turnos = [];
 turnos.push(julio);
 
@@ -48,18 +49,40 @@ function requestTurn() {
         let topic = document.querySelector(`#tema${i}`).value;
         meetingTopics.push(topic);
     }
-    let type = document.querySelector('#type').value;
-    let day = document.querySelector('#day').value;
-    let month = document.querySelector('#month').value;
-    let year = document.querySelector('#year').value;
-    let schedule = document.querySelector('#schedule').value;
-    let date = new Date(year, month, day, schedule, 00);
+
+    //Manejo de fechas del turno - REEMPLAZAR POR LIBRERÍA LUXON
+    let type = document.querySelector('#type').value; // Para saber duración del turno
+    let d = document.querySelector('#day').value;
+    let m = document.querySelector('#month').value;
+    let y = document.querySelector('#year').value;
+    let schedule = JSON.parse(document.querySelector('#schedule').value);
+    let date = luxon.DateTime.fromObject({day:d, month:m, year:y});
+    date = date.plus(schedule);
+    console.log(date);
+    //Creación de objeto persona con los datos del formulario
     const persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 0, date);
     console.log(persona); 
     return persona;
 }
 
-//Función que agrega el turno al array de turnos.
+    //Validar que la fecha no sea anterior al día de hoy por medio de resta de fechas
+
+//Evento de click en "Pedir turno"
+
+let requestTurnButton = document.getElementById('requestTurnButton');
+requestTurnButton.addEventListener('click', () => {
+    document.querySelector('#turnForm').classList.remove('displayNone');
+    //Tomar datos del usuario logueado.
+    isUserLogged = localStorage.getItem('userInformation');
+    if (isUserLogged != null) {
+        let userLogged = JSON.parse(isUserLogged);
+        let form = document.querySelector('#turnForm');
+        form.name.value = userLogged.name;
+        form.type.value = userLogged.type;
+    } 
+    });
+
+//Función que agrega el turno al array de turnos // *** Mejorar para que verifique que no se repitan turnos *** 
 
 function addTurn(turnsList, e) {
     if (!isEmptyForm()) {
@@ -88,14 +111,9 @@ function findTurnForUser(turnsList) {
     const id = parseInt(prompt('Ingrese el número de turno a buscar'));
     const turn = findTurn(id, turnsList);
     if (turn) {
-
-        let duration = "";
-        if (turn.type = 2) {
-            duration = "media hora";}
-        else {
-            duration = "una hora"}
-
-        let text = `<br>Hola ${turn.name}!</br><br>Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br>
+        turn.type = 2? duration = "media hora": duration = "una hora";
+        let text = `<br>Hola ${turn.name}!</br><br>Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br> 
+        a las ${turn.date.hour}:${turn.date.minute}<br> 
         Los temas de la reunión son: ${turn.info.toString()} <br>
         La duración máxima de la reunión es de ${duration}`;
         document.querySelector("#turnDetails").innerHTML = text;
@@ -132,12 +150,7 @@ cantTemas.addEventListener('input', () => generateTopicCamps());
 
 //Para evitar que Enter envie el formulario
 let formIntroEvent = document.querySelector('#turnForm');
-formIntroEvent.addEventListener('keypress', (event) => {
-    if (event.keyCode == 13) {
-        event.preventDefault();
-        return false;
-      }
-});
+formIntroEvent.addEventListener('keypress', (event) => event.keyCode == 13? event.preventDefault(): null);
 
 function isEmptyForm () {
     let name = document.querySelector('#name').value;
