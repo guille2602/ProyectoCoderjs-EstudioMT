@@ -34,6 +34,7 @@ class Contribuyente {
     this.name = name,
     this.cuit = cuit,
     this.password = password,
+    this.phone = phone,
     this.type = type,
     this.autonom = autonom,
     this.sicoss = sicoss,
@@ -48,6 +49,7 @@ function createUser(users){
     userForm.regName.value,
     userForm.regCUIT.value,
     userForm.regPass.value,
+    userForm.regCelNum.value,
     userForm.regType.value,
     userForm.regImp.checked,
     userForm.regSegSoc.checked,
@@ -56,9 +58,6 @@ function createUser(users){
   )
   users.push(newUser);
 }
-
-//Agregar borrar datos del formulario tras el registro exitoso ***FALTA TERMINAR***
-
 
 //Chequeo que los datos de registro nombre y tipo de usuario sean completados y el tamaño del cuit para poder crear usuario nuevo.
 function checkIfCompleted(){
@@ -166,7 +165,7 @@ function loadCalendar(){
     iibbDate.innerHTML = 
     userData.iibb == 1 && `${vencimientosIIBBARBA[lastDigit]}/${month}/${year}` ||
     userData.iibb == 2 && `${vencimientosIIBBAGIP[lastDigit]}/${month}/${year}` ||
-    userData.iibb == 3 &&  `${vencimientosCM[lastDigit]}/${month}/${year}`
+    userData.iibb == 3 &&  `${vencimientosCM[lastDigit]}/${month}/${year}`;
 
     const ivaDate = document.getElementById('ivaDate');
     ivaDate.innerHTML = `${vencimientosIVA[lastDigit]}/${month}/${year}`

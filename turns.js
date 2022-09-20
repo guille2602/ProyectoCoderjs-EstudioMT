@@ -65,7 +65,7 @@ function requestTurn() {
     return persona;
 }
 
-    //Validar que la fecha no sea anterior al día de hoy por medio de resta de fechas
+//Validar que la fecha no sea anterior al día de hoy por medio de resta de fechas***************
 
 //Evento de click en "Pedir turno"
 
@@ -79,6 +79,7 @@ requestTurnButton.addEventListener('click', () => {
         let form = document.querySelector('#turnForm');
         form.name.value = userLogged.name;
         form.type.value = userLogged.type;
+        form.tel.value = userLogged.phone;
     } 
     });
 
@@ -159,7 +160,7 @@ function isEmptyForm () {
     let day = document.querySelector('#day').value;
     let month = document.querySelector('#month').value;
     let year = document.querySelector('#year').value;
-    if (name == "" || tel == ""  || cantTopics == "0" || day == "" || month == "" || year == "") {
+    if (name == "" || tel == ""  || cantTopics == 0 || day == "" || month == "" || year == "") {
         return true}
         else {return false}
 }

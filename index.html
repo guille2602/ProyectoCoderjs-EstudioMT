@@ -105,6 +105,10 @@
                             <label for="regPass" maxlength="11">Contraseña</label>
                             <input type="password" id="regPass" name="regPass">
                         </div>
+                        <div class="flex-y">
+                            <label for="regCelNum">Número de celular</label>
+                            <input type="number" id="regCelNum" name="regCelNum">
+                        </div>
                         <div class="flex-x">
                             <label for="regType">Condición ante el IVA</label>
                             <select id="regType" name="regType">
@@ -147,6 +151,9 @@
             </div>
         </div>
     </div>
+
+     <!-- Solicitud de turnos-->
+
     <form id="turnForm" class="displayNone">
         <div id="camp1" class="dataForm">
             <label for="nameForm">Nombre</label>
@@ -215,9 +222,9 @@
     <div class="opciones">
         <!-- Turnos, cotizador y scripts correspondientes-->
         <button type="button" id="requestTurnButton" class="mainbutton provisorio">
-        Pedir un turno</button>
-        <button class="mainbutton provisorio"  onclick="findTurnForUser(turnos)">Consultar un turno</button>
-        <button class="mainbutton" onclick="">Cotizar servicio</button>
+        Pedir turno</button>
+        <button class="mainbutton provisorio"  onclick="findTurnForUser(turnos)">Consultar turno</button>
+        <button class="mainbutton" onclick="">Cancelar turno</button>
     </div>
     <div id="blackBackground" class="displayNone">
         <div id="turnInfo">
