@@ -71,14 +71,13 @@ function requestTurn() {
         meetingTopics.push(topic);
     }
     let date = document.querySelector('#turnDate').value;
-    let luxonDate = luxon.DateTime.fromISO(flatpickr.parseDate(date, "Z").toISOString());
+    date? date = luxon.DateTime.fromISO(flatpickr.parseDate(date, "Z").toISOString()) : null;
 
-    console.log(date);
     //Manejo de fechas del turno - REEMPLAZAR POR LIBRERÍA LUXON
     let type = document.querySelector('#type').value; // Para saber duración del turno
 
     //Creación de objeto persona con los datos del formulario
-    const persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 0, luxonDate);
+    const persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 0, date);
     console.log(persona); 
     return persona;
 }
@@ -108,10 +107,13 @@ function addTurn(turnsList, e) {
         const turnID = turnsList.length;
         turnsList[turnsList.length - 1].assignTurnId(turnID);
         console.log(turnsList);
-        alert(`Su número de turno es ${turnID}`);
+        Swal.fire({
+            icon: 'info',
+            title: `Su número de turno es ${turnID}`,
+          });
         hideInfo('#turnForm', e);
         return turnsList;
-    } else {alert('Por favor completa todos los datos del formulario')}
+    }
 }
 
 // //Busca un turno por número de turno.
@@ -169,12 +171,19 @@ cantTemas.addEventListener('input', () => generateTopicCamps());
 let formIntroEvent = document.querySelector('#turnForm');
 formIntroEvent.addEventListener('keypress', (event) => event.keyCode == 13? event.preventDefault(): null);
 
+//Hay que corroborar que la fecha no esté vacía pero necesito devolver la información de proceso async de calendario*** Falta cambiar ***
+
 function isEmptyForm () {
     let name = document.querySelector('#name').value;
     let tel = document.querySelector('#tel').value;
     let cantTopics = document.querySelector('#cantTopics').value;
-    if (name == "" || tel == ""  || cantTopics == 0) {
+    let dateSelected = document.querySelector('#turnDate').value
+    if (name == "" || tel == ""  || cantTopics == 0 ) {
+        Swal.fire({
+            icon: 'warning',
+            title: `Complete todos los datos del formulario`,
+        }); 
         return true}
-        else {return false}
+    else 
+        {return false}
 }
-

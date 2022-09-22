@@ -70,7 +70,10 @@ function checkIfCompleted(){
 function signUp(event) {
   event.preventDefault();
   createUser(userslist);
-  alert('Usuario creado con éxito, por favor ingrese con su usuario');
+  Swal.fire({
+    icon: 'success',
+    title: 'Usuario creado exitosamente',
+  })
 }
 
 //Función de logueo de usuario con sus respectivas validaciones
