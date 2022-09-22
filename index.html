@@ -10,8 +10,8 @@
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
     integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
-    crossorigin="anonymous"
-  />
+    crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
     
@@ -161,7 +161,7 @@
         </div>
         <div id="camp2">
             <label for="day" class="dataForm">Ingrese fecha</label>
-            <input type="text" id="day" name="day" placeholder="dd" required>
+            <!-- <input type="text" id="day" name="day" placeholder="dd" required>
             <input type="text" id="month" name="month" placeholder="mm" required>
             <input type="text" id="year" name="year" placeholder="aaaa" required>
             <select id="schedule" name="schedule" required>
@@ -181,7 +181,8 @@
                 <option value='{"hours":"15","minutes":"30"}'>15:30</option>
                 <option value='{"hours":"16","minutes":"0"}'>16:00</option>
                 <option value='{"hours":"16","minutes":"30"}'>16:30</option>
-            </select>
+            </select> -->
+            <input type="datetime-local" id="turnDate" placeholder="Elija una fecha">
         </div>
         <div id="camp3">
             <label for="tel" class="dataForm">Número de teléfono</label>
@@ -226,23 +227,15 @@
         <button class="mainbutton provisorio"  onclick="findTurnForUser(turnos)">Consultar turno</button>
         <button class="mainbutton" onclick="">Cancelar turno</button>
     </div>
-    <div id="blackBackground" class="displayNone">
-        <div id="turnInfo">
-            <h2>INFORMACIÓN DEL TURNO</h2>
-            <p id="turnDetails"></p>
-            <div id="turnButtons" class="turnButtons">
-                <button onclick="hideInfo('#blackBackground', event)">OK</button>
-            </div>
-        </div>
-
-    </div>
 </body>
 <footer>
     <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.0/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="./turns.js"></script>
     <script src="./index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <p>Estudio Contable MT - 2022 - Alumno: Guillermo Seclen Alfaro</p>
 </footer>
 </html>

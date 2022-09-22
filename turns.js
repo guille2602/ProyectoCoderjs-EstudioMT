@@ -37,7 +37,28 @@ let julio = new Person ('Julio' , '1133969444' , 2 , ['Impuestos', 'Sueldos'], 2
 let turnos = [];
 turnos.push(julio);
 
-//Función para asignar un turno a una persona (06/09/2022 - Reemplazado prompt por formulario)
+//Función para asignar un turno a una persona
+
+config = {
+    enableTime: true,
+    altInput: true,
+    altFormat: "d-m-Y (H:i)",
+    minDate: 'today',
+    minTime: "09:00",
+    maxTime: "16:30",
+    disable: [
+        function(date) {
+            // return true to disable
+            return (date.getDay() === 0 || date.getDay() === 6);
+
+        }
+    ],
+    locale: {
+        "firstDayOfWeek": 0,
+    }
+};
+
+flatpickr("#turnDate", config);
 
 function requestTurn() {
     document.querySelector('#turnForm').classList.remove('displayNone');
@@ -49,29 +70,25 @@ function requestTurn() {
         let topic = document.querySelector(`#tema${i}`).value;
         meetingTopics.push(topic);
     }
+    let date = document.querySelector('#turnDate').value;
+    let luxonDate = luxon.DateTime.fromISO(flatpickr.parseDate(date, "Z").toISOString());
 
+    console.log(date);
     //Manejo de fechas del turno - REEMPLAZAR POR LIBRERÍA LUXON
     let type = document.querySelector('#type').value; // Para saber duración del turno
-    let d = document.querySelector('#day').value;
-    let m = document.querySelector('#month').value;
-    let y = document.querySelector('#year').value;
-    let schedule = JSON.parse(document.querySelector('#schedule').value);
-    let date = luxon.DateTime.fromObject({day:d, month:m, year:y});
-    date = date.plus(schedule);
-    console.log(date);
+
     //Creación de objeto persona con los datos del formulario
-    const persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 0, date);
+    const persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 0, luxonDate);
     console.log(persona); 
     return persona;
 }
-
-//Validar que la fecha no sea anterior al día de hoy por medio de resta de fechas***************
 
 //Evento de click en "Pedir turno"
 
 let requestTurnButton = document.getElementById('requestTurnButton');
 requestTurnButton.addEventListener('click', () => {
-    document.querySelector('#turnForm').classList.remove('displayNone');
+document.querySelector('#turnForm').classList.remove('displayNone');
+
     //Tomar datos del usuario logueado.
     isUserLogged = localStorage.getItem('userInformation');
     if (isUserLogged != null) {
@@ -104,29 +121,28 @@ function findTurn(turnNro, turnsList) {
     return found;
 }
 
-// Consultar un turno
+// Consultar un turno *** HAY QUE AGREGAR SWEETALERT CON ASYNC PARA QUE LEA EL VALOR INGRESADO***
 
 function findTurnForUser(turnsList) {
-    let blackBackground = document.getElementById("blackBackground");
-    blackBackground.classList.remove("displayNone");
     const id = parseInt(prompt('Ingrese el número de turno a buscar'));
     const turn = findTurn(id, turnsList);
     if (turn) {
         turn.type = 2? duration = "media hora": duration = "una hora";
-        let text = `<br>Hola ${turn.name}!</br><br>Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br> 
-        a las ${turn.date.hour}:${turn.date.minute}<br> 
-        Los temas de la reunión son: ${turn.info.toString()} <br>
-        La duración máxima de la reunión es de ${duration}`;
-        document.querySelector("#turnDetails").innerHTML = text;
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Información del turno',
+            html:`<br>Hola ${turn.name}!</br><br>Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br> 
+            a las ${turn.date.hour}:${turn.date.minute}<br> 
+            Los temas de la reunión son: ${turn.info.toString()} <br>
+            La duración máxima de la reunión es de ${duration}`
+        })
     } else {
-        document.querySelector("#turnDetails").innerHTML = "<br>Turno no encontrado";
-        if (!document.querySelector("#addedButton")) {
-            let newTurnButton = document.createElement("button");
-            newTurnButton.innerHTML = "Consultar nuevamente";
-            newTurnButton.setAttribute("onclick","findTurnForUser(turnos)");
-            newTurnButton.setAttribute("id","addedButton")
-            document.querySelector("#turnButtons").append(newTurnButton);
-        }
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Turno no encontrado',
+          })
     }
 }
 
@@ -157,10 +173,7 @@ function isEmptyForm () {
     let name = document.querySelector('#name').value;
     let tel = document.querySelector('#tel').value;
     let cantTopics = document.querySelector('#cantTopics').value;
-    let day = document.querySelector('#day').value;
-    let month = document.querySelector('#month').value;
-    let year = document.querySelector('#year').value;
-    if (name == "" || tel == ""  || cantTopics == 0 || day == "" || month == "" || year == "") {
+    if (name == "" || tel == ""  || cantTopics == 0) {
         return true}
         else {return false}
 }
