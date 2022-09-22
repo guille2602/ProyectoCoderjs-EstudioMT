@@ -30,7 +30,7 @@ function hideIfNotMono () {
 
 //Constructor de contribuyente
 class Contribuyente {
-  constructor (name, cuit, password, type, autonom, sicoss, iva, iibb) {
+  constructor (name, cuit, password, phone, type, autonom, sicoss, iva, iibb) {
     this.name = name,
     this.cuit = cuit,
     this.password = password,
