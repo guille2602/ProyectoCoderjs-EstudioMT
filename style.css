@@ -368,3 +368,31 @@ footer{
     font-weight: 600;
     margin-right: 0.75em;
 }
+
+#proxferiadoFloat {
+    display:flex;
+    flex-direction: row;
+    margin-top: 0.5em;
+    font-family: roboto;
+    font-size: 0.8em;
+    background-color: #faf5b2;
+    border-radius: 1em;
+    padding: 0.3em 1em 0.3em 1em;
+    border-width: 2px;
+    box-shadow: 0 0 10px rgba(48, 48, 48, 0.2);
+}
+
+#proxferiadoFloat p {
+    margin: 0;
+    align-self:center;
+    justify-content: center;
+}
+
+#closeProxFeriado {
+    margin:0;
+    align-self:center;
+    justify-content: center;
+    border-style: none;
+    font-weight: 600;
+    background-color: rgba(0,0,0,0)
+}
