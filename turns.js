@@ -54,9 +54,11 @@ config = {
         }
     ],
     locale: {
-        "firstDayOfWeek": 0,
-    }
+        "firstDayOfWeek": 0
+    },
+    onClose: (date) => checkIfLaborable(date[0]),
 };
+
 
 flatpickr("#turnDate", config);
 
