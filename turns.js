@@ -20,14 +20,6 @@ class Person {
     cancelTurn () {
         this.active = false;
     }
-
-    assignTurnId (id) {
-        this.turn = id;
-    }
-
-    modifyTurn (date) {
-        this.date = date;
-    }
 }
 
 //Creo un turno de prueba y una lista de turnos
@@ -122,12 +114,13 @@ function addTurn(turnsList, e) {
 
 function findTurn(turnNro, turnsList) {
     const found = turnsList.find((turno) => turno.turn == turnNro);
-    return found;
+    if (found?.active == true) return found;
 }
 
 // Consultar un turno *** HAY QUE AGREGAR SWEETALERT CON ASYNC PARA QUE LEA EL VALOR INGRESADO***
 
 function findTurnForUser(turnsList) {
+    //Reemplazar por Sweet Alert
     const id = parseInt(prompt('Ingrese el número de turno a buscar'));
     const turn = findTurn(id, turnsList);
     if (turn) {
@@ -139,8 +132,30 @@ function findTurnForUser(turnsList) {
             html:`<br>Hola ${turn.name}!</br><br>Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br> 
             a las ${turn.date.hour}:${turn.date.minute}<br> 
             Los temas de la reunión son: ${turn.info.toString()} <br>
-            La duración máxima de la reunión es de ${duration}`
-        })
+            La duración máxima de la reunión es de ${duration}`,
+            showCancelButton: true,
+            cancelButtonText: 'OK',
+            confirmButtonText: 'Cancelar turno',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: '¿Está seguro que desea cancelar el turno?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0094BC',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, confirmar',
+                    cancelButtonText: 'Cancelar',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                        turnsList[id - 1].cancelTurn();
+                        Swal.fire(
+                        'Su turno ha sido cancelado correctamente'
+                      )
+                    }
+                  })
+            }})
+
     } else {
 
         Swal.fire({

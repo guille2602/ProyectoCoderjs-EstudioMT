@@ -4,8 +4,8 @@ function proximosFeriados (arrayDeFeriados) {
     const today = new Date();
     let prox = [];
     for (feriado of arrayDeFeriados) {
-        let feriadoDate = new Date(today.getFullYear(), feriado.mes, feriado.dia);
-        feriadoDate >= today? prox.push(feriado): null;
+        let feriadoDate = new Date(today.getFullYear(), feriado.mes - 1, feriado.dia);
+        feriadoDate > today && prox.push(feriado);
     }
     return prox;
 }
