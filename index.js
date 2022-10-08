@@ -1,4 +1,4 @@
-//Vencimientos mensuales
+//Vencimientos mensuales - Inicializar desde Json
 const vencimientosAutonomos = [05,05,05,05,06,06,06,07,07,07];
 const vencimientosMonotributo = 20;
 const vencimientosIVA = [19,19,20,20,21,21,22,22,23,23];
@@ -186,5 +186,5 @@ function logout(event) {
   document.location.reload();
 }
 
-localStorage.getItem("userInformation")? showredBar(): null;
-localStorage.getItem("userInformation")? hideloginButons(): null;
+//acá hacer el fetch al json
+localStorage.getItem("userInformation") && showredBar() && hideloginButons();

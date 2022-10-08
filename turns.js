@@ -67,7 +67,7 @@ function requestTurn() {
     let date = document.querySelector('#turnDate').value;
     date? date = luxon.DateTime.fromISO(flatpickr.parseDate(date, "Z").toISOString()) : null;
 
-    //Manejo de fechas del turno - REEMPLAZAR POR LIBRERÍA LUXON
+    //Manejo de fechas del turno
     let type = document.querySelector('#type').value; // Para saber duración del turno
 
     //Creación de objeto persona con los datos del formulario
@@ -93,7 +93,7 @@ document.querySelector('#turnForm').classList.remove('displayNone');
     } 
     });
 
-//Función que agrega el turno al array de turnos // *** Mejorar para que verifique que no se repitan turnos *** 
+//Función que agrega el turno al array de turnos
 
 function addTurn(turnsList, e) {
     if (!isEmptyForm()) {
@@ -117,15 +117,19 @@ function findTurn(turnNro, turnsList) {
     if (found?.active == true) return found;
 }
 
-// Consultar un turno *** HAY QUE AGREGAR SWEETALERT CON ASYNC PARA QUE LEA EL VALOR INGRESADO***
+// Consultar un turno
 
-function findTurnForUser(turnsList) {
-    //Reemplazar por Sweet Alert
-    const id = parseInt(prompt('Ingrese el número de turno a buscar'));
+async function findTurnForUser(turnsList) {
+
+    const {value: id} = await Swal.fire({
+        title: 'Consultar turnos',
+        text: 'Por favor ingrese el número de su turno',
+        input: 'number',
+    });
+
     const turn = findTurn(id, turnsList);
     if (turn) {
-        turn.type = 2? duration = "media hora": duration = "una hora";
-
+        let duration = turn.type == 2? "media hora": "una hora";
         Swal.fire({
             icon: 'info',
             title: 'Información del turno',
@@ -134,24 +138,28 @@ function findTurnForUser(turnsList) {
             Los temas de la reunión son: ${turn.info.toString()} <br>
             La duración máxima de la reunión es de ${duration}`,
             showCancelButton: true,
-            cancelButtonText: 'OK',
+            cancelButtonText: 'Cerrar',
             confirmButtonText: 'Cancelar turno',
+            confirmButtonColor: '#dc4c23',
+            cancelButtonColor: '#0094BC',
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
                     title: '¿Está seguro que desea cancelar el turno?',
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#0094BC',
-                    cancelButtonColor: '#d33',
+                    confirmButtonColor: '#dc4c23',
+                    cancelButtonColor: '#0094BC',
                     confirmButtonText: 'Si, confirmar',
                     cancelButtonText: 'Cancelar',
                   }).then((result) => {
                     if (result.isConfirmed) {
                         turnsList[id - 1].cancelTurn();
-                        Swal.fire(
-                        'Su turno ha sido cancelado correctamente'
-                      )
+                        Swal.fire({
+                        confirmButtonColor: '#0094BC',
+                        title:'Su turno ha sido cancelado correctamente',
+                        confirmButtonText: 'Aceptar'
+                    })
                     }
                   })
             }})
