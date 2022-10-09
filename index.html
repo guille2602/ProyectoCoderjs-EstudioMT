@@ -6,16 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./style.css" rel="stylesheet" type="text/css">
     <title>Estudio Contable MT - Impositivo, laboral y societario</title>
-    <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
-    integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
-    crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
     
-    <!-- Header -->
+    <!-- NAV Bar -->
     <div id="colourbar">
         <div id="loginSection">
             <button 
@@ -28,12 +24,18 @@
                 data-bs-toggle="modal" data-bs-target="#registerModal">
                 Registrarse
             </button>
-            <!--Esto se reemplaza con el usuario logueado, hay que agregar función para agregar vencimientos-->
-            <button 
-                id="loggedUser" type="button" class="mainbutton provisorio displayNone" onclick="logout(event)">
-                UserName
-            </button>
         </div>
+        <div class="dropdown">
+            <button id="loggedUser" class="btn dropdown-toggle my-2 displayNone" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              LoggedUser
+            </button>
+            <ul class="dropdown-menu">
+    <!--Falta terminar, hay que incorporar historial de turnos y editar preferencias-->
+              <li><button id="prefBTN" class="dropdown-item mainbutton provisorio" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Editar preferencias</button></li>
+              <li><button id="turnsHistBTN" class="dropdown-item" href="#">Historial de turnos</button></li>
+              <li><button id="logoutBTN" class="dropdown-item" onclick="logout(event)">Salir</button></li>
+            </ul>
+          </div>
     </div>
 
     <!--La información de cada tabla será cargada en vectores-->
@@ -57,9 +59,7 @@
         </div>
     </div>
 
-    <!-- Se va a usar también para validar los turnos y que no se puedan asignar un día feriado-->
     <div id="proxferiadoFloat" class="displayNone"></div>
-
 
     <!-- Modal de logueo-->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -70,7 +70,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
                     <form id="loginInput">
                         <label for="cuit">CUIT</label>
                         <input id="cuit" name="cuit" type="number" maxlength="11" required="">
@@ -95,7 +94,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
                     <form id="registerInput">
                         <div class="flex-y">
                             <label for="regName">Nombre completo</label>
@@ -148,7 +146,7 @@
                         </div>
                         <div class="x-flex twobuttons">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button id="regSubmit" type="submit" class="btn btn-primary displayNone" data-bs-dismiss="modal" onclick="signUp(event)">Crear usuario</button>
+                            <button id="regSubmit" type="submit" class="btn btn-primary displayNone" data-bs-dismiss="modal" onclick="signUp(event)">Confirmar</button>
                         </div>
                     </form>
                 </div>
@@ -165,27 +163,6 @@
         </div>
         <div id="camp2">
             <label for="day" class="dataForm">Ingrese fecha</label>
-            <!-- <input type="text" id="day" name="day" placeholder="dd" required>
-            <input type="text" id="month" name="month" placeholder="mm" required>
-            <input type="text" id="year" name="year" placeholder="aaaa" required>
-            <select id="schedule" name="schedule" required>
-                <option value='{"hours":"9","minutes":"0"}'>9:00</option>
-                <option value='{"hours":"9","minutes":"30"}'>9:30</option>
-                <option value='{"hours":"10","minutes":"0"}'>10:00</option>
-                <option value='{"hours":"10","minutes":"30"}'>10:30</option>
-                <option value='{"hours":"11","minutes":"0"}'>11:00</option>
-                <option value='{"hours":"11","minutes":"30"}'>11:30</option>
-                <option value='{"hours":"12","minutes":"0"}'>12:00</option>
-                <option value='{"hours":"12","minutes":"30"}'>12:30</option>
-                <option value='{"hours":"13","minutes":"0"}'>13:00</option>
-                <option value='{"hours":"13","minutes":"30"}'>13:30</option>
-                <option value='{"hours":"14","minutes":"0"}'>14:00</option>
-                <option value='{"hours":"14","minutes":"30"}'>14:30</option>
-                <option value='{"hours":"15","minutes":"0"}'>15:00</option>
-                <option value='{"hours":"15","minutes":"30"}'>15:30</option>
-                <option value='{"hours":"16","minutes":"0"}'>16:00</option>
-                <option value='{"hours":"16","minutes":"30"}'>16:30</option>
-            </select> -->
             <input type="datetime-local" id="turnDate" placeholder="Elija una fecha" required>
         </div>
         <div id="camp3">
@@ -219,7 +196,6 @@
             <button id="cancel" class="formButton"onclick="hideInfo('#turnForm', event)">Cancelar</button>
         </div>    
     </form>
-
     <img id="logo" src="./logo.png">
     <div class="access">
         <a href="#">Ingresar a la web</a>
@@ -229,16 +205,16 @@
         <button type="button" id="requestTurnButton" class="mainbutton provisorio">Pedir turno</button>
         <button class="mainbutton provisorio"  onclick="findTurnForUser(turnos)">Consultar turno</button>
     </div>
-</body>
-<footer>
     <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.0/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="./turns.js"></script>
     <script src="./feriados.js"></script>
     <script src="./index.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+</body>
+<footer>
     <p>Estudio Contable MT - 2022 - Alumno: Guillermo Seclen Alfaro</p>
 </footer>
 </html>

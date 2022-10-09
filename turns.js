@@ -42,18 +42,13 @@ config = {
         function(date) {
             // return true to disable
             return (date.getDay() === 0 || date.getDay() === 6);
-
         }
     ],
-    locale: {
-        "firstDayOfWeek": 0
-    },
+    locale: {"firstDayOfWeek": 0},
     onClose: (date) => checkIfLaborable(date[0]),
 };
 
-
 flatpickr("#turnDate", config);
-
 function requestTurn() {
     document.querySelector('#turnForm').classList.remove('displayNone');
     let name = document.querySelector('#name').value;
@@ -163,13 +158,11 @@ async function findTurnForUser(turnsList) {
                     }
                   })
             }})
-
     } else {
-
         Swal.fire({
             icon: 'error',
             title: 'Turno no encontrado',
-          })
+        })
     }
 }
 
@@ -178,14 +171,14 @@ function generateTopicCamps() {
     let cantCamps = document.getElementById('cantTopics').value;
     for (i = 1 ; i <= cantCamps; i++){
         const newLabel = document.createElement("label");
-            newLabel.setAttribute("for",`tema${i}`);
-            newLabel.innerHTML = `Ingrese tema ${i}`;
-            document.querySelector('#camp6').append(newLabel);
+        newLabel.setAttribute("for",`tema${i}`);
+        newLabel.innerHTML = `Ingrese tema ${i}`;
+        document.querySelector('#camp6').append(newLabel);
         const newImput = document.createElement("input");
-            newImput.setAttribute("type","text");
-            newImput.setAttribute("id",`tema${i}`);
-            newImput.setAttribute("name",`tema${i}`)
-            document.querySelector('#camp6').append(newImput);
+        newImput.setAttribute("type","text");
+        newImput.setAttribute("id",`tema${i}`);
+        newImput.setAttribute("name",`tema${i}`)
+        document.querySelector('#camp6').append(newImput);
     }
 }
 

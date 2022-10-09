@@ -30,6 +30,13 @@ h3 {
     padding-right: 1vw;;
 }
 
+ #loggedUser {
+    font-family: roboto;
+    font-style: normal;
+    color: #ffffff;
+    
+ }
+
 #loginSection button{
     background-color: none;
     color: none;
