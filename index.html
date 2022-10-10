@@ -30,13 +30,36 @@
               LoggedUser
             </button>
             <ul class="dropdown-menu">
-    <!--Falta terminar, hay que incorporar historial de turnos y editar preferencias-->
               <li><button id="prefBTN" class="dropdown-item mainbutton provisorio" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Editar preferencias</button></li>
-              <li><button id="turnsHistBTN" class="dropdown-item" href="#">Historial de turnos</button></li>
+              <li><button id="turnsHistBTN" type="button" class="dropdown-item mainbutton provisorio" data-bs-toggle="modal" data-bs-target="#historialModal">Historial de turnos</button></li>
               <li><button id="logoutBTN" class="dropdown-item" onclick="logout(event)">Salir</button></li>
             </ul>
           </div>
     </div>
+
+    <div class="modal fade" id="historialModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Historial de turnos</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="text-align: center">
+              <table id="turnsRecord" class="table table-striped">
+                <tr>
+                    <th class="col-sm-1 col-md-1 col-lg-1 col-xl-1">Nº</th>
+                    <th class="col-sm-3 col-md-3 col-lg-3 col-xl-3">Fecha</th>
+                    <th class="col-sm-3 col-md-3 col-lg-3 col-xl-3">Estado</th>
+                    <th class="col-sm-5 col-md-5 col-lg-5 col-xl-5">Temas</th>
+                </tr>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button id="closeTurnsRecordBTN" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <!--La información de cada tabla será cargada en vectores-->
     <div id="infobar" class="displayNone">
@@ -144,9 +167,9 @@
                                 </select>
                             </div> 
                         </div>
-                        <div class="x-flex twobuttons">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button id="regSubmit" type="submit" class="btn btn-primary displayNone" data-bs-dismiss="modal" onclick="signUp(event)">Confirmar</button>
+                        <div class="row x-flex twobuttons">
+                            <button type="button" class="col-sm-6 btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button id="regSubmit" type="submit" class="col-sm-6 btn btn-primary" data-bs-dismiss="modal" onclick="signUp(event)" disabled>Confirmar</button>
                         </div>
                     </form>
                 </div>
@@ -201,7 +224,6 @@
         <a href="#">Ingresar a la web</a>
     </div>
     <div class="opciones">
-        <!-- Turnos, cotizador y scripts correspondientes-->
         <button type="button" id="requestTurnButton" class="mainbutton provisorio">Pedir turno</button>
         <button class="mainbutton provisorio"  onclick="findTurnForUser(turnos)">Consultar turno</button>
     </div>

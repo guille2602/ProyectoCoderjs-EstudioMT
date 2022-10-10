@@ -25,14 +25,18 @@ class Person {
     }
 }
 
-//Creo un turno de prueba y una lista de turnos
-let DateTime = luxon.DateTime;
-let dt = DateTime.local(2022,8,31,14,30);
-let julio = new Person ('Julio' , '1133969444' , 2 , ['Impuestos', 'Sueldos'], 2, true, 1, dt);
-let turnos = [];
-turnos.push(julio);
+//IMPORTACIÓN DE TURNOS DE PRUEBA DESDE JSON
 
-//Función para asignar un turno a una persona
+let turnos = [];
+let DateTime = luxon.DateTime;
+fetch('./regUsers.json')
+.then((turns) => turns.json())
+.then((turns) =>{
+    for (t of turns) {t.date = DateTime.fromISO(t.date)}
+    turnos = turns;
+})
+
+//IMPLEMENTACIÓN DE LIBRERÍA FLATPICKR PARA SELECCIÓN Y LIMITACIÓN DE FECHAS DESDE CALENDARIO
 
 config = {
     enableTime: true,
@@ -52,6 +56,9 @@ config = {
 };
 
 flatpickr("#turnDate", config);
+
+// FUNCIÓN PARA PEDIR UN TURNO
+
 function requestTurn() {
     document.querySelector('#turnForm').classList.remove('displayNone');
     let name = document.querySelector('#name').value;
@@ -64,22 +71,19 @@ function requestTurn() {
     }
     let date = document.querySelector('#turnDate').value;
     date? date = luxon.DateTime.fromISO(flatpickr.parseDate(date, "Z").toISOString()) : null;
-
-    //Manejo de fechas del turno
-    let type = document.querySelector('#type').value; // Para saber duración del turno
-
-    //Creación de objeto persona con los datos del formulario
+    let type = document.querySelector('#type').value;
     const persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 0, date);
     return persona;
 }
 
-//Evento de click en "Pedir turno"
+//EVENTO "PEDIR UN TURNO"
 
 let requestTurnButton = document.getElementById('requestTurnButton');
 requestTurnButton.addEventListener('click', () => {
 document.querySelector('#turnForm').classList.remove('displayNone');
 
-    //Tomar datos del usuario logueado.
+//TOMAR LOS DATOS DEL LOCAL STORAGE SI EL USUARIO YA ESTÁ LOGUEADO.
+
     isUserLogged = localStorage.getItem('userInformation');
     if (isUserLogged != null) {
         let userLogged = JSON.parse(isUserLogged);
@@ -90,13 +94,13 @@ document.querySelector('#turnForm').classList.remove('displayNone');
     } 
     });
 
-//Función que agrega el turno al array de turnos
+//INCORPORACIÓN DE TURNOS AL ARRAY DE TURNOS - (PARA PROBAR, EL TURNO 1 SE ENCUENTRA CANCELADO, DEBERÍA DE NO ENCONTRARLO)
 
 function addTurn(turnsList, e) {
     if (!isEmptyForm()) {
         turnsList.push(requestTurn());
         const turnID = turnsList.length;
-        turnsList[turnsList.length - 1].assignTurnId(turnID); // Está fallando esta línea
+        turnsList[turnsList.length - 1].assignTurnId(turnID);
         Swal.fire({
             icon: 'info',
             title: `Su número de turno es ${turnID}`,
@@ -106,38 +110,34 @@ function addTurn(turnsList, e) {
     }
 }
 
-// //Busca un turno por número de turno.
+// BUSQUEDA DE TURNOS
 
 function findTurn(turnNro, turnsList) {
     const found = turnsList.find((turno) => turno.turn == turnNro);
     if (found?.active == true) return found;
 }
 
-// Consultar un turno
-
 async function findTurnForUser(turnsList) {
-
     const {value: id} = await Swal.fire({
         title: 'Consultar turnos',
         text: 'Por favor ingrese el número de su turno',
         input: 'number',
     });
-
     const turn = findTurn(id, turnsList);
     if (turn) {
         let duration = turn.type == 2? "media hora": "una hora";
         Swal.fire({
             icon: 'info',
             title: 'Información del turno',
-            html:`<br>Hola ${turn.name}!</br><br>Usted tiene turno el día <b>${turn.date.toLocaleString()}</b> <br> 
-            a las ${turn.date.hour}:${turn.date.minute}<br> 
-            Los temas de la reunión son: ${turn.info.toString()} <br>
-            La duración máxima de la reunión es de ${duration}`,
+            html:`<br>Hola ${turn.name}!</br><br>Usted tiene turno agendado para el día:<br> 
+            <b>${turn.date.toLocaleString()} a las ${turn.date.hour}:${turn.date.minute} hs.</b><br><br>
+            Los temas de la reunión son: <br>${turn.info.toString().replace(",","<br>")}`,
             showCancelButton: true,
             cancelButtonText: 'Cerrar',
             confirmButtonText: 'Cancelar turno',
             confirmButtonColor: '#dc4c23',
             cancelButtonColor: '#0094BC',
+            footer:`<p style="font-size: 8pt; margin: 0">La duración máxima de la reunión es de ${duration}</p>`
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
@@ -186,18 +186,20 @@ function generateTopicCamps() {
 let cantTemas = document.querySelector('#cantTopics');
 cantTemas.addEventListener('input', () => generateTopicCamps());
 
-//Para evitar que Enter envie el formulario
+//PREVENCIÓN DE ENVÍO DE FORMULARIO CON TECLA ENTER
+
 let formIntroEvent = document.querySelector('#turnForm');
 formIntroEvent.addEventListener('keypress', (event) => event.keyCode == 13? event.preventDefault(): null);
 
-//Hay que corroborar que la fecha no esté vacía pero necesito devolver la información de proceso async de calendario*** Falta cambiar ***
+//CORROBORAR QUE NO SE PIDA EL TURNO SIN COMPLETAR TODOS LOS DATOS DEL FORMULARIO ******FALTA CONTROLAR FECHA********
+
+let emptyDate = 0; 
 
 function isEmptyForm () {
     let name = document.querySelector('#name').value;
     let tel = document.querySelector('#tel').value;
     let cantTopics = document.querySelector('#cantTopics').value;
-    let dateSelected = document.querySelector('#turnDate').value
-    if (name == "" || tel == ""  || cantTopics == 0 ) {
+    if (name == "" || tel == ""  || cantTopics == 0) {
         Swal.fire({
             icon: 'warning',
             title: `Complete todos los datos del formulario`,
@@ -205,4 +207,52 @@ function isEmptyForm () {
         return true}
     else 
         {return false}
+}
+
+// HISTORIAL DE TURNOS - EL IDENTIFICADOR PARA LOS TURNOS ES EL NÚMERO DE TELÉFONO PROPORCIONADO
+
+let turnsHistBTN = document.querySelector('#turnsHistBTN');
+turnsHistBTN.addEventListener('click', () => {
+    const logedUsr = JSON.parse(localStorage.getItem('userInformation'));
+    completeTurnsRcrd(logedUsr.phone);
+})
+
+function completeTurnsRcrd(phNr){
+    const turnsHist = turnos.filter((trn) => trn.phone = phNr);
+    const turnsTable = document.querySelector('#turnsRecord');
+    let status = "";
+    let today = DateTime.now();
+    if (turnsHist.length != 0) {
+        for (tn of turnsHist) {
+            //Estado del turno
+            if (tn.active) {
+                status = today > tn.date? "Válido": "Pendiente";
+            } else {status = "Cancelado"};
+            let temas = tn.info.toString().replace(",","<br>");
+            const row = document.createElement('tr');
+            row.classList.add('table-striped');
+            row.innerHTML = ` 
+                <td>${tn.turn}</td>
+                <td>${tn.date.toLocaleString(DateTime.DATETIME_MED)}</td>
+                <td>${status}</td>
+                <td>${temas}</td>
+                `;
+            turnsTable.appendChild(row);
+        }
+    }
+}
+
+//RESETEAR HISTORIAL DE TURNOS AL CERRARLO
+
+let closeTurnsRecordBTN = document.querySelector('#closeTurnsRecordBTN');
+closeTurnsRecordBTN.addEventListener('click', () => resetTurnsRcrd());
+
+function resetTurnsRcrd(){
+    document.querySelector('#turnsRecord').innerHTML=`
+    <tr>
+    <th class="col-sm-1 col-md-1 col-lg-1 col-xl-1">Nº</th>
+    <th class="col-sm-3 col-md-3 col-lg-3 col-xl-3">Fecha</th>
+    <th class="col-sm-3 col-md-3 col-lg-3 col-xl-3">Estado</th>
+    <th class="col-sm-5 col-md-5 col-lg-5 col-xl-5">Temas</th>
+    </tr>`
 }

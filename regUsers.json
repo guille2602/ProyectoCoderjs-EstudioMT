@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Pedro Perez",
+        "phone": "1163592041",
+        "topics": 2,
+        "info": ["Monotributo"],
+        "type": 2,
+        "active":false,
+        "turn": 1, 
+        "date": "2022-10-15T15:30:00.000Z"
+    },
+    {
+        "name": "Pedro Perez",
+        "phone": "1163592041",
+        "topics": 2,
+        "info": ["Monotributo"],
+        "type": 2,
+        "active":true,
+        "turn": 2, 
+        "date": "2022-09-22T17:00:00.000Z"
+    },
+    {
+        "name": "Pedro Perez",
+        "phone": "1163592041",
+        "topics": 2,
+        "info": ["Sueldos","Autónomos"],
+        "type": 2,
+        "active":true,
+        "turn": 3, 
+        "date": "2022-09-24T19:30:00.000Z"
+    },
+    {
+        "name": "Pedro Perez",
+        "phone": "1163592041",
+        "topics": 1,
+        "info": ["Declaraciones juradas anuales"],
+        "type": 2,
+        "active":true,
+        "turn": 4, 
+        "date": "2022-10-11T14:30:00.000Z"
+    }
+]

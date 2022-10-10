@@ -1,0 +1,13 @@
+[
+    {
+        "name": "Pedro Perez", 
+        "cuit" : 20359423854,
+        "password": 123456,
+        "phone": 1133969444,
+        "type": 2,
+        "autonom": true,
+        "sicoss": true,
+        "iva" : false,
+        "iibb": 2
+    }
+]

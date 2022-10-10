@@ -1,25 +1,28 @@
-//Inicialización de variables globales
+//INICIALIZACIÓN DE VARIABLES GLOBALES
 const loginForm = document.querySelector('#loginInput');
 let userForm = document.querySelector('#registerInput');
 let userslist = []; 
 
+//LEO SI ALGUIEN DEJÓ LA SESIÓN INICIADA PARA CARGAR LOS VENCIMIENTOS
 let userData = JSON.parse(localStorage.getItem('userInformation'));
 userData && hideloginButons();
 
-//Chequeo que los datos de registro se hayan completado
+//EVENTLISTENERS PARA CHEQUEO DE DATOS DEL FORMULARIO COMPLETOS
 userReg = userForm.regName;
 userReg.addEventListener('change', () => checkIfCompleted());
 userCUIT = userForm.regCUIT;
 userCUIT.addEventListener('change', () => {checkIfCompleted()});
 userType = userForm.regType;
 userType.addEventListener('change', () => {checkIfCompleted(); hideIfNotMono()});
+userPass = userForm.regPass;
+userPass.addEventListener('change', () => {checkIfCompleted(); hideIfNotMono()});
 
 function hideIfNotMono () {
   document.getElementById('regType').value != 1? document.getElementById('iva').classList.add('displayNone'): 
   document.getElementById('iva').classList.remove('displayNone');
 }
 
-//Constructor de contribuyente
+//CONSTRUCTOR DE CLASE "CONTRIBUYENTE"
 class Contribuyente {
   constructor (name, cuit, password, phone, type, autonom, sicoss, iva, iibb) {
     this.name = name,
@@ -34,7 +37,13 @@ class Contribuyente {
   }
 }
 
-//Creación de usuario desde los datos del formulario de registro
+//FETCH A REGUSER.JSON COMO EJEMPLO DE USUARIO CREADO ANTERIORMENTE
+
+fetch('./userPassList.json')
+.then((ulst) => ulst.json())
+.then((ulst) => {userslist = ulst});
+
+//CREACIÓN DE USUARIO TOMANDO DATOS DEL FORMULARIO DE REGISTRO - ***HAY QUE VALIDAR QUE EL CUIT NO SE ENCUENTRE YA EN LA BASE DE DATOS***
 function createUserFromForm () {
   const newUser = new Contribuyente (
     userForm.regName.value,
@@ -58,8 +67,7 @@ function createUser(users){
 const prefBTN = document.querySelector('#prefBTN');
 prefBTN.addEventListener('click',editUser(userslist));
 
-//Edición de los datos del formulario de registro
-
+//EDICIÓN DEL FORMULARIO DE REGISTRO
 function preloadFormFromLS() {
   userForm.regName.value = userData.name;
   userForm.regCUIT.value = userData.cuit;
@@ -79,14 +87,37 @@ function editUser(users){
   }
 }
 
-//Chequeo que los datos de registro nombre y tipo de usuario sean completados y el tamaño del cuit para poder crear usuario nuevo.
+//EVITAR ENVIAR FORMULARIO CON TECLA ENTER
+
+let registerModal = document.querySelector('#registerModal');
+registerModal.addEventListener('keypress', (event) => event.keyCode == 13? event.preventDefault(): null);
+
+//CHEQUEO SI SE COMPLETARON LOS DATOS Y EL TAMAÑO DEL CUIT ANTES DE ENVIAR LOS DATOS
 function checkIfCompleted(){
-  let validation = userForm.regName.value !== "" && userForm.regType.value !== "" && userForm.regCUIT.value.length == 11? true : false;
-  validation? document.querySelector('#regSubmit').classList.remove('displayNone') : false;
-  return validation
+  let validation1 = userForm.regName.value !== "" && userForm.regType.value !== "" && userForm.regCUIT.value.length == 11 && userForm.regPass.value !== ""
+  !validation1 && document.querySelector('#regSubmit').setAttribute('disabled',"");
+  let validation2 = true;
+  if (!localStorage.getItem('userInformation') && userForm.regCUIT.value != "" && checkIfCUITExists(userForm.regCUIT.value)){
+    Swal.fire({
+      icon: 'error',
+      title: 'El CUIT ya se encuentra registrado'
+  })
+  document.querySelector('#regSubmit').setAttribute('disabled',"")
+  validation2 = false;
+  }
+  validation1 && validation2 && document.querySelector('#regSubmit').removeAttribute('disabled');
+  return true
 }
 
-//Función de creación de un nuevo usuario. 
+function checkIfCUITExists(cuit) {
+  for (u of userslist) {
+    if (u.cuit == cuit){
+     return true;
+     break;
+  } else {return false}
+  }}
+
+//CREACIÓN DE NUEVO USUARIO
 function signUp(event) {
   event.preventDefault();
   if (!userData) {
@@ -109,14 +140,14 @@ function signUp(event) {
   }
 }
 
-//Función de logueo de usuario con sus respectivas validaciones
+//LOGUEO Y VALIDACIONES *** VER SI AGREGO AWAIT ***
 function loginF(e){
   e.preventDefault();
   const user = loginForm.cuit.value;
   const password = loginForm.password.value;
   const validation = user !== "" && password !=="" ? true : false;
   if (validation) {
-    if (findAndValidateUser(userslist, user, password)) { //Ver si agrego await********
+    if (findAndValidateUser(userslist, user, password)) {
       createUserInLocalStorage(userslist, user);
       hideloginButons();
       showredBar();
@@ -131,28 +162,12 @@ function loginF(e){
   else {
     Swal.fire({
       icon: 'error',
-      title: 'Por favor todos los datos',
+      title: 'Por favor complete todos los datos',
   })
   }
 }
 
-//Guarda en el local storage los datos del usuario
-function createUserInLocalStorage(usersArray, cuit) {
-  let found = {};
-  userslist.length !== 0
-  ? found = usersArray.find((u) => u.cuit == cuit)
-  : found = createUserFromForm ();
-  const foundString = JSON.stringify(found);
-  localStorage.setItem('userInformation',foundString);
-}
-
-//Vacía el formulario de login
-function resetLoginForm() {
-  loginForm.cuit.value = "";
-  loginForm.password.value = "";
-}
-
-//Encontrar usuario en el array de usuarios y verificar que la contraseña coincida ********ver si agrego fetch
+//VALIDACIÓN DE LOGUEO DEL USUSARIO - SI SOBRA TIEMPO AGREGAR FETCH
 function findAndValidateUser(usersArray, cuit, password){
   const found = usersArray.find((u) => u.cuit == cuit);
   let validate = false;
@@ -162,7 +177,23 @@ function findAndValidateUser(usersArray, cuit, password){
   return validate;
 }
 
-//Función para reemplazar los botones del header al loguearse
+//ALMACENAMIENTO DE USUARIO EN LOCAL STORAGE
+function createUserInLocalStorage(usersArray, cuit) {
+  let found = {};
+  userslist.length !== 0
+  ? found = usersArray.find((u) => u.cuit == cuit)
+  : found = createUserFromForm ();
+  const foundString = JSON.stringify(found);
+  localStorage.setItem('userInformation',foundString);
+}
+
+//VACÍA EL FORMULARIO DE LOGIN
+function resetLoginForm() {
+  loginForm.cuit.value = "";
+  loginForm.password.value = "";
+}
+
+//REEMPLAZO DEL NAVBAR AL LOGUEARSE
 function hideloginButons() {
   let btn = document.querySelector('#loginButton');
   btn.classList.add('displayNone');
@@ -173,9 +204,9 @@ function hideloginButons() {
   document.querySelector('#registerButton').classList.add('displayNone');
 }
 
-//**************A partir de acá comienzan las funciones de "MIS VENCIMIENTOS"*****************
+//SECCIÓN DE ***MIS VENCIMIENTOS***
 
-//Función para mostrar la barra de vencimientos (redbar)
+//PERSONALIZACIÓN DE BARRA DE VENCIMIENTOS
 
 function showredBar() {
   let userData = JSON.parse(localStorage.getItem('userInformation'))
@@ -194,8 +225,6 @@ function showredBar() {
     document.querySelector('#sicossTable').classList.remove('displayNone'): 
     document.querySelector('#sicossTable').classList.add('displayNone');
 }
-
-//Adaptar tabla de vencimientos al contribuyente
 
 function loadCalendar(){
     let userData = JSON.parse(localStorage.getItem('userInformation'))
@@ -221,16 +250,14 @@ function loadCalendar(){
 
   };
 
-//Función para desloguearse
-
+//DESLOGUEO DE USUARIO
 function logout(event) {
   event.preventDefault();
   localStorage.removeItem('userInformation')
   document.location.reload();
 }
 
-//Carga de vencimientos desde archivo json local con listados de vencimientos
-
+//CARGA DE VENCIMIENTOS POR FETCH A JSON LOCAL
 fetch("./vencimientos.json")
 .then((response) => response.json())
 .then ( (vencimientos) => {

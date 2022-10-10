@@ -63,7 +63,13 @@ h3 {
 
 .twobuttons{
     padding-top: 1.5em;
-    flex-grow: 4;
+    padding-bottom: 1.5em;
+}
+
+.fs-10{
+    font-size:8pt;
+    text-align: center;
+    font-family: roboto;
 }
 
 /****Red Infobar CSS****/
@@ -403,3 +409,8 @@ footer{
     font-weight: 600;
     background-color: rgba(0,0,0,0)
 }
+
+.hideArrowsOnNr { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
