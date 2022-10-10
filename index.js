@@ -96,18 +96,16 @@ function signUp(event) {
       title: 'Usuario creado exitosamente',
     })
   } else {
-    //************* Entonces es edición de usuario ***************
-    //1. Actualizar array de usuarios con información actualizada del form
     const i = userslist.findIndex((user) => {
       return user.cuit == loginForm.cuit.value;
     })
     userslist[i] = createUserFromForm ();
-    //2. Actualizar local storage
     createUserInLocalStorage(userslist, loginForm.cuit.value);
-    //3. Actualizar tabla
     showredBar();
-    //4. Swal informando actualización del usuario correcta
-
+    Swal.fire({
+      icon: 'success',
+      title: 'Datos actualizados correctamente',
+    })
   }
 }
 
@@ -123,16 +121,27 @@ function loginF(e){
       hideloginButons();
       showredBar();
     } else {
-      alert('Usuario o contraseña incorrectos');
+      Swal.fire({
+        icon: 'error',
+        title: 'Usuario o contraseña incorrectos',
+    });
       resetLoginForm()
     }
   } 
-  else {alert('Complete todos los datos')}
+  else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Por favor todos los datos',
+  })
+  }
 }
 
 //Guarda en el local storage los datos del usuario
 function createUserInLocalStorage(usersArray, cuit) {
-  const found = usersArray.find((u) => u.cuit == cuit);
+  let found = {};
+  userslist.length !== 0
+  ? found = usersArray.find((u) => u.cuit == cuit)
+  : found = createUserFromForm ();
   const foundString = JSON.stringify(found);
   localStorage.setItem('userInformation',foundString);
 }

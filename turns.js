@@ -17,6 +17,9 @@ class Person {
         this.date = date;
     }
     
+    assignTurnId(id) {
+        this.turn = id;
+    }
     cancelTurn () {
         this.active = false;
     }
@@ -67,7 +70,6 @@ function requestTurn() {
 
     //Creación de objeto persona con los datos del formulario
     const persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 0, date);
-    console.log(persona); 
     return persona;
 }
 
@@ -94,8 +96,7 @@ function addTurn(turnsList, e) {
     if (!isEmptyForm()) {
         turnsList.push(requestTurn());
         const turnID = turnsList.length;
-        turnsList[turnsList.length - 1].assignTurnId(turnID);
-        console.log(turnsList);
+        turnsList[turnsList.length - 1].assignTurnId(turnID); // Está fallando esta línea
         Swal.fire({
             icon: 'info',
             title: `Su número de turno es ${turnID}`,
