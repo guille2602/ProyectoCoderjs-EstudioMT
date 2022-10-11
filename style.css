@@ -409,8 +409,3 @@ footer{
     font-weight: 600;
     background-color: rgba(0,0,0,0)
 }
-
-.hideArrowsOnNr { 
-    -webkit-appearance: none; 
-    margin: 0; 
-  }

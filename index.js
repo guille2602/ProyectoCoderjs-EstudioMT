@@ -114,7 +114,6 @@ function checkIfCUITExists(cuit) {
 
 //CREACIÓN DE NUEVO USUARIO
 function signUp(event) {
-  let userData = JSON.parse(localStorage.getItem('userInformation'))
   event.preventDefault();
   if (userData == null) {
     createUser(userslist);
@@ -123,11 +122,10 @@ function signUp(event) {
       title: 'Usuario creado exitosamente',
     })
   } else {
-    const i = userslist.findIndex((user) => {
-      return user.cuit == loginForm.cuit.value;
-    })
+    preloadFormFromLS();
+    const i = userslist.findIndex(us => us.cuit == registerInput.regCUIT.value)
     userslist[i] = createUserFromForm ();
-    createUserInLocalStorage(userslist, loginForm.cuit.value);
+    createUserInLocalStorage(userslist, registerInput.regCUIT.value);
     showredBar();
     Swal.fire({
       icon: 'success',
@@ -177,7 +175,6 @@ function findAndValidateUser(usersArray, cuit, password){
 //ALMACENAMIENTO DE USUARIO EN LOCAL STORAGE
 function createUserInLocalStorage(usersArray, cuit) {
   let found = usersArray.find((u) => u.cuit == cuit);
-  if (found == 'undefined') {found = createUserFromForm()}
   const foundString = JSON.stringify(found);
   localStorage.setItem('userInformation',foundString);
 }
@@ -187,6 +184,9 @@ function resetLoginForm() {
   loginForm.cuit.value = "";
   loginForm.password.value = "";
 }
+
+let loggedUser = document.querySelector('#loggedUser');
+loggedUser.addEventListener('click', () => setTimeout(() => {preloadFormFromLS(),1}))
 
 //REEMPLAZO DEL NAVBAR AL LOGUEARSE
 function hideloginButons() {
