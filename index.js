@@ -43,7 +43,7 @@ fetch('./userPassList.json')
 .then((ulst) => ulst.json())
 .then((ulst) => {userslist = ulst});
 
-//CREACIÓN DE USUARIO TOMANDO DATOS DEL FORMULARIO DE REGISTRO - ***HAY QUE VALIDAR QUE EL CUIT NO SE ENCUENTRE YA EN LA BASE DE DATOS***
+//CREACIÓN DE USUARIO TOMANDO DATOS DEL FORMULARIO DE REGISTRO
 function createUserFromForm () {
   const newUser = new Contribuyente (
     userForm.regName.value,
@@ -65,10 +65,11 @@ function createUser(users){
 }
 
 const prefBTN = document.querySelector('#prefBTN');
-prefBTN.addEventListener('click',editUser(userslist));
+prefBTN.addEventListener('click',editUser());
 
 //EDICIÓN DEL FORMULARIO DE REGISTRO
 function preloadFormFromLS() {
+  let userData = JSON.parse(localStorage.getItem('userInformation'));
   userForm.regName.value = userData.name;
   userForm.regCUIT.value = userData.cuit;
   userForm.regPass.value = userData.password;
@@ -80,11 +81,8 @@ function preloadFormFromLS() {
   userForm.regIngresosBrutos.value = userData.iibb;
 }
 
-function editUser(users){
-  if (localStorage.getItem("userInformation")){
-  preloadFormFromLS();
-  checkIfCompleted();
-  }
+function editUser(){
+  userData !== null && checkIfCompleted();
 }
 
 //EVITAR ENVIAR FORMULARIO CON TECLA ENTER
@@ -94,16 +92,13 @@ registerModal.addEventListener('keypress', (event) => event.keyCode == 13? event
 
 //CHEQUEO SI SE COMPLETARON LOS DATOS Y EL TAMAÑO DEL CUIT ANTES DE ENVIAR LOS DATOS
 function checkIfCompleted(){
-  let validation1 = userForm.regName.value !== "" && userForm.regType.value !== "" && userForm.regCUIT.value.length == 11 && userForm.regPass.value !== ""
-  !validation1 && document.querySelector('#regSubmit').setAttribute('disabled',"");
+  let validation1 = userForm.regName.value !== "" && userForm.regType.value !== "" && userForm.regCUIT.value.length == 11 && userForm.regPass.value !== "";
   let validation2 = true;
-  if (!localStorage.getItem('userInformation') && userForm.regCUIT.value != "" && checkIfCUITExists(userForm.regCUIT.value)){
+  if (localStorage.getItem('userInformation') == null && userForm.regCUIT.value != "" && checkIfCUITExists(userForm.regCUIT.value)) {
     Swal.fire({
       icon: 'error',
       title: 'El CUIT ya se encuentra registrado'
-  })
-  document.querySelector('#regSubmit').setAttribute('disabled',"")
-  validation2 = false;
+    })
   }
   validation1 && validation2 && document.querySelector('#regSubmit').removeAttribute('disabled');
   return true
@@ -119,8 +114,9 @@ function checkIfCUITExists(cuit) {
 
 //CREACIÓN DE NUEVO USUARIO
 function signUp(event) {
+  let userData = JSON.parse(localStorage.getItem('userInformation'))
   event.preventDefault();
-  if (!userData) {
+  if (userData == null) {
     createUser(userslist);
     Swal.fire({
       icon: 'success',
@@ -151,6 +147,7 @@ function loginF(e){
       createUserInLocalStorage(userslist, user);
       hideloginButons();
       showredBar();
+      preloadFormFromLS() 
     } else {
       Swal.fire({
         icon: 'error',
@@ -167,7 +164,7 @@ function loginF(e){
   }
 }
 
-//VALIDACIÓN DE LOGUEO DEL USUSARIO - SI SOBRA TIEMPO AGREGAR FETCH
+//VALIDACIÓN DE LOGUEO DEL USUARIO - SI SOBRA TIEMPO AGREGAR FETCH
 function findAndValidateUser(usersArray, cuit, password){
   const found = usersArray.find((u) => u.cuit == cuit);
   let validate = false;
@@ -179,10 +176,8 @@ function findAndValidateUser(usersArray, cuit, password){
 
 //ALMACENAMIENTO DE USUARIO EN LOCAL STORAGE
 function createUserInLocalStorage(usersArray, cuit) {
-  let found = {};
-  userslist.length !== 0
-  ? found = usersArray.find((u) => u.cuit == cuit)
-  : found = createUserFromForm ();
+  let found = usersArray.find((u) => u.cuit == cuit);
+  if (found == 'undefined') {found = createUserFromForm()}
   const foundString = JSON.stringify(found);
   localStorage.setItem('userInformation',foundString);
 }
