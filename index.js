@@ -11,11 +11,14 @@ userData && hideloginButons();
 userReg = userForm.regName;
 userReg.addEventListener('change', () => checkIfCompleted());
 userCUIT = userForm.regCUIT;
-userCUIT.addEventListener('change', () => {checkIfCompleted()});
+userCUIT.addEventListener('change', () => checkIfCompleted());
 userType = userForm.regType;
 userType.addEventListener('change', () => {checkIfCompleted(); hideIfNotMono()});
 userPass = userForm.regPass;
 userPass.addEventListener('change', () => {checkIfCompleted(); hideIfNotMono()});
+
+ri = registerInput
+ri.addEventListener('change', () => {checkIfCompleted()});
 
 function hideIfNotMono () {
   document.getElementById('regType').value != 1? document.getElementById('iva').classList.add('displayNone'): 
@@ -64,9 +67,6 @@ function createUser(users){
   users.push(newUser);
 }
 
-const prefBTN = document.querySelector('#prefBTN');
-prefBTN.addEventListener('click',editUser());
-
 //EDICIÓN DEL FORMULARIO DE REGISTRO
 function preloadFormFromLS() {
   let userData = JSON.parse(localStorage.getItem('userInformation'));
@@ -79,10 +79,6 @@ function preloadFormFromLS() {
   userForm.regSegSoc.checked = userData.sicoss;
   userForm.regIva.checked = userData.iva;
   userForm.regIngresosBrutos.value = userData.iibb;
-}
-
-function editUser(){
-  userData !== null && checkIfCompleted();
 }
 
 //EVITAR ENVIAR FORMULARIO CON TECLA ENTER
@@ -101,7 +97,7 @@ function checkIfCompleted(){
     })
   }
   validation1 && validation2 && document.querySelector('#regSubmit').removeAttribute('disabled');
-  return true
+  return validation1
 }
 
 function checkIfCUITExists(cuit) {
@@ -122,7 +118,6 @@ function signUp(event) {
       title: 'Usuario creado exitosamente',
     })
   } else {
-    preloadFormFromLS();
     const i = userslist.findIndex(us => us.cuit == registerInput.regCUIT.value)
     userslist[i] = createUserFromForm ();
     createUserInLocalStorage(userslist, registerInput.regCUIT.value);
@@ -145,7 +140,6 @@ function loginF(e){
       createUserInLocalStorage(userslist, user);
       hideloginButons();
       showredBar();
-      preloadFormFromLS() 
     } else {
       Swal.fire({
         icon: 'error',
@@ -222,7 +216,7 @@ function showredBar() {
 }
 
 function loadCalendar(){
-    let userData = JSON.parse(localStorage.getItem('userInformation'))
+    let userData = JSON.parse(localStorage.getItem('userInformation'));
     const lastDigit = userData.cuit % 10;
     const autonomTitle = document.getElementById('autonomTitle');
     const autonomDate = document.getElementById('autonomDate');
