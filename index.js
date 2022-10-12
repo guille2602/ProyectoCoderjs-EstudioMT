@@ -8,19 +8,10 @@ let userData = JSON.parse(localStorage.getItem('userInformation'));
 userData && hideloginButons();
 
 //EVENTLISTENERS PARA CHEQUEO DE DATOS DEL FORMULARIO COMPLETOS
-userReg = userForm.regName;
-userReg.addEventListener('change', () => checkIfCompleted());
-userCUIT = userForm.regCUIT;
-userCUIT.addEventListener('change', () => checkIfCompleted());
-userType = userForm.regType;
-userType.addEventListener('change', () => {checkIfCompleted(); hideIfNotMono()});
-userPass = userForm.regPass;
-userPass.addEventListener('change', () => {checkIfCompleted(); hideIfNotMono()});
-
 ri = registerInput
-ri.addEventListener('change', () => {checkIfCompleted()});
+ri.addEventListener('change', () => {checkIfCompleted(); hideIfNotMono()});
 
-function hideIfNotMono () {
+function hideIfNotMono() {
   document.getElementById('regType').value != 1? document.getElementById('iva').classList.add('displayNone'): 
   document.getElementById('iva').classList.remove('displayNone');
 }
@@ -96,8 +87,11 @@ function checkIfCompleted(){
       title: 'El CUIT ya se encuentra registrado'
     })
   }
+  localStorage.getItem('userInformation') !== null? document.querySelector('#regCUIT').setAttribute('disabled',"") :document.querySelector('#regCUIT').removeAttribute('disabled');
   validation1 && validation2 && document.querySelector('#regSubmit').removeAttribute('disabled');
-  return validation1
+  let validation = validation1 && validation2? true : false;
+  !validation &&  document.querySelector('#regSubmit').setAttribute('disabled',"")
+  return validation
 }
 
 function checkIfCUITExists(cuit) {
@@ -140,6 +134,7 @@ function loginF(e){
       createUserInLocalStorage(userslist, user);
       hideloginButons();
       showredBar();
+      document.querySelector('#regCUIT').setAttribute('disabled',"");
     } else {
       Swal.fire({
         icon: 'error',
@@ -213,6 +208,7 @@ function showredBar() {
   userData.sicoss? 
     document.querySelector('#sicossTable').classList.remove('displayNone'): 
     document.querySelector('#sicossTable').classList.add('displayNone');
+  !userData.autonom && !userData.iva && userData.iibb == 0 && !userData.sicoss && document.getElementById('infobar').classList.add('displayNone'); 
 }
 
 function loadCalendar(){
