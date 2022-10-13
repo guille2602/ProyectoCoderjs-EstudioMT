@@ -149,6 +149,8 @@ let formIntroEvent = document.querySelector('#turnForm');
 formIntroEvent.addEventListener('keypress', (event) => event.keyCode == 13? event.preventDefault(): null);
 
 //EVENT LISTENERS DE PEDIR TURNO
+let consCancelTurnBTN = document.getElementById('consCancelTurnBTN');
+consCancelTurnBTN.addEventListener('click', () => findTurnForUser(turnos));
 
 let submitButton = document.getElementById('submitButton');
 submitButton.addEventListener('click', () => submitTurnForm(event));
