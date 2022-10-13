@@ -10,12 +10,8 @@ class Person {
         this.turn = turn; 
         this.date = date;
     }
-    
     assignTurnId(id) {
         this.turn = id;
-    }
-    cancelTurn () {
-        this.active = false;
     }
 }
 
@@ -85,6 +81,7 @@ async function findTurnForUser(turnsList) {
     });
     const turn = findTurn(id, turnsList);
     if (turn) {
+        tempVar = id - 1;
         let duration = turn.type == 2? "media hora": "una hora";
         Swal.fire({
             icon: 'info',
@@ -110,7 +107,7 @@ async function findTurnForUser(turnsList) {
                     cancelButtonText: 'Cancelar',
                   }).then((result) => {
                     if (result.isConfirmed) {
-                        turnsList[id - 1].cancelTurn();
+                        turnsList[id - 1].active = false;
                         Swal.fire({
                         confirmButtonColor: '#0094BC',
                         title:'Su turno ha sido cancelado correctamente',
@@ -174,6 +171,8 @@ let cancelBTN = document.getElementById('cancel');
 cancelBTN.addEventListener('click',(event) => {
     event.preventDefault();
     hideInfo('#turnForm');
+    document.querySelector('#turnForm').reset();
+    generateTopicCamps();
 })
 
 //INCORPORACIÓN DE TURNOS AL ARRAY DE TURNOS - (PARA PROBAR, EL TURNO 1 SE ENCUENTRA CANCELADO, DEBERÍA DE NO ENCONTRARLO)
@@ -193,12 +192,6 @@ function addTurn(turnsList) {
     hideInfo('#turnForm');
     return turnsList;
 }
-
-//BORRAR LOS CAMPOS DEL FORMULARIO UNA VEZ PEDIDO EL TURNO
-
-function resetTurnForm() {
-
-};
 
 //VALIDACIÓN DE CAMPOS VACÍOS ANTES DE ENVIAR EL FORMULARIO
 
@@ -225,7 +218,7 @@ function submitTurnForm(event){
         icon: 'warning',
         title: `Complete todos los datos del formulario`,
     }); 
-    val && resetTurnForm();
+    val && document.querySelector('#turnForm').reset() && generateTopicCamps();
 }
 
 // HISTORIAL DE TURNOS (EL IDENTIFICADOR PARA LOS TURNOS ES EL NÚMERO DE TELÉFONO)
@@ -237,7 +230,7 @@ turnsHistBTN.addEventListener('click', () => {
 })
 
 function completeTurnsRcrd(phNr){
-    const turnsHist = turnos.filter((trn) => trn.phone = phNr);
+    const turnsHist = turnos.filter((trn) => trn.phone == phNr);
     const turnsTable = document.querySelector('#turnsRecord');
     let status = "";
     let today = DateTime.now();
