@@ -15,12 +15,12 @@
     <div id="colourbar">
         <div id="loginSection">
             <button 
-                id="loginButton" type="button" class="mainbutton provisorio" 
+                id="loginButton" type="button" class="mainbutton blue" 
                 data-bs-toggle="modal" data-bs-target="#loginModal">
                 Ingresar
             </button>
             <button 
-                id="registerButton" type="button" class="mainbutton provisorio" 
+                id="registerButton" type="button" class="mainbutton blue" 
                 data-bs-toggle="modal" data-bs-target="#registerModal">
                 Registrarse
             </button>
@@ -30,8 +30,8 @@
               LoggedUser
             </button>
             <ul class="dropdown-menu">
-              <li><button id="prefBTN" class="dropdown-item mainbutton provisorio" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Editar preferencias</button></li>
-              <li><button id="turnsHistBTN" type="button" class="dropdown-item mainbutton provisorio" data-bs-toggle="modal" data-bs-target="#historialModal">Historial de turnos</button></li>
+              <li><button id="prefBTN" class="dropdown-item mainbutton blue" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Editar preferencias</button></li>
+              <li><button id="turnsHistBTN" type="button" class="dropdown-item mainbutton blue" data-bs-toggle="modal" data-bs-target="#historialModal">Historial de turnos</button></li>
               <li><button id="logoutBTN" class="dropdown-item" onclick="logout(event)">Salir</button></li>
             </ul>
           </div>
@@ -178,30 +178,29 @@
     </div>
 
      <!-- Solicitud de turnos-->
-
     <form id="turnForm" class="displayNone">
         <div id="camp1" class="dataForm">
             <label for="nameForm">Nombre</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name">
         </div>
         <div id="camp2">
             <label for="day" class="dataForm">Ingrese fecha</label>
-            <input type="datetime-local" id="turnDate" placeholder="Elija una fecha" required>
+            <input type="datetime-local" id="turnDate" placeholder="Elija una fecha">
         </div>
         <div id="camp3">
             <label for="tel" class="dataForm">Número de teléfono</label>
-            <input type="text" id="tel" name="tel" required>
+            <input type="text" id="tel" name="tel">
         </div>
         <div id="camp4">
             <label for="type">Tipo de contribuyente</label>
-            <select id="type" name="type" required>
+            <select id="type" name="type">
                 <option value="1">Responsable Inscripto</option>
                 <option value="2">Monotributista</option>
             </select>
         </div>
         <div id="camp5">
             <label for="cantTopics">¿Cuántos temas desea consultar?</label>
-            <select type="number" id="cantTopics" name="cantTopics" onchange="" required>
+            <select type="number" id="cantTopics" name="cantTopics" onchange="">
                 <option value="" selected disabled hidden>(Seleccionar)</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -212,11 +211,10 @@
             </select>
         </div>
         <div id="camp6">
-        <!-- Acá se van a colocar los campos de temas por medio de javascript -->
         </div>
         <div id="okCancel">
-            <button id="submitButton" class="formButton" type="submit" onclick="addTurn(turnos, event)">Enviar</button>
-            <button id="cancel" class="formButton"onclick="hideInfo('#turnForm', event)">Cancelar</button>
+            <button id="submitButton" class="formButton" type="submit">Enviar</button>
+            <button id="cancel" type="button "class="formButton">Cancelar</button>
         </div>    
     </form>
     <img id="logo" src="./logo.png">
@@ -224,8 +222,8 @@
         <a href="#">Ingresar a la web</a>
     </div>
     <div class="opciones">
-        <button type="button" id="requestTurnButton" class="mainbutton provisorio">Pedir turno</button>
-        <button class="mainbutton provisorio"  onclick="findTurnForUser(turnos)">Consultar turno</button>
+        <button type="button" id="requestTurnButton" class="mainbutton blue">Pedir turno</button>
+        <button class="mainbutton blue"  onclick="findTurnForUser(turnos)">Consultar turno</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.0/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

@@ -77,7 +77,7 @@ function preloadFormFromLS() {
 let registerModal = document.querySelector('#registerModal');
 registerModal.addEventListener('keypress', (event) => event.keyCode == 13? event.preventDefault(): null);
 
-//CHEQUEO SI SE COMPLETARON LOS DATOS Y EL TAMAÑO DEL CUIT ANTES DE ENVIAR LOS DATOS
+//CHEQUEO SI HAY CAMPOS VACIOS EN FORMULARIO, TAMAÑO DE CUIT Y CUIT REPETIDO.
 function checkIfCompleted(){
   let validation1 = userForm.regName.value !== "" && userForm.regType.value !== "" && userForm.regCUIT.value.length == 11 && userForm.regPass.value !== "";
   let validation2 = true;
@@ -102,7 +102,7 @@ function checkIfCUITExists(cuit) {
   } else {return false}
   }}
 
-//CREACIÓN DE NUEVO USUARIO
+//CREACION DE NUEVO USUARIO / ACTUALIZACION DE DATOS DE REGISTRO
 function signUp(event) {
   event.preventDefault();
   if (userData == null) {
@@ -112,18 +112,23 @@ function signUp(event) {
       title: 'Usuario creado exitosamente',
     })
   } else {
-    const i = userslist.findIndex(us => us.cuit == registerInput.regCUIT.value)
-    userslist[i] = createUserFromForm ();
-    createUserInLocalStorage(userslist, registerInput.regCUIT.value);
-    showredBar();
-    Swal.fire({
-      icon: 'success',
-      title: 'Datos actualizados correctamente',
-    })
-  }
+      const i = userslist.findIndex(us => us.cuit == registerInput.regCUIT.value)
+      //ESTE IF CORRIJE EL ERROR POR NO PODER ACTUALIZAR LA BASE DE DATOS (userPassList.json) AL REFRESCAR LA PÁGINA.
+      if (i == -1){
+      createUser(userslist);
+      } else {
+        userslist[i] = createUserFromForm ();
+      } 
+      createUserInLocalStorage(userslist, registerInput.regCUIT.value);
+      showredBar();
+      Swal.fire({
+        icon: 'success',
+        title: 'Datos actualizados correctamente',
+      })
+    }
 }
 
-//LOGUEO Y VALIDACIONES *** VER SI AGREGO AWAIT ***
+//LOGUEO Y VALIDACIONES
 function loginF(e){
   e.preventDefault();
   const user = loginForm.cuit.value;
@@ -151,7 +156,7 @@ function loginF(e){
   }
 }
 
-//VALIDACIÓN DE LOGUEO DEL USUARIO - SI SOBRA TIEMPO AGREGAR FETCH
+//VALIDACIÓN DE LOGUEO DEL USUARIO
 function findAndValidateUser(usersArray, cuit, password){
   const found = usersArray.find((u) => u.cuit == cuit);
   let validate = false;
@@ -178,6 +183,7 @@ let loggedUser = document.querySelector('#loggedUser');
 loggedUser.addEventListener('click', () => setTimeout(() => {preloadFormFromLS(),1}))
 
 //REEMPLAZO DEL NAVBAR AL LOGUEARSE
+
 function hideloginButons() {
   let btn = document.querySelector('#loginButton');
   btn.classList.add('displayNone');
@@ -187,8 +193,6 @@ function hideloginButons() {
   usr.classList.remove('displayNone');
   document.querySelector('#registerButton').classList.add('displayNone');
 }
-
-//SECCIÓN DE ***MIS VENCIMIENTOS***
 
 //PERSONALIZACIÓN DE BARRA DE VENCIMIENTOS
 
@@ -242,7 +246,7 @@ function logout(event) {
   document.location.reload();
 }
 
-//CARGA DE VENCIMIENTOS POR FETCH A JSON LOCAL
+//CARGA DE VENCIMIENTOS POR FETCH A JSON
 fetch("./vencimientos.json")
 .then((response) => response.json())
 .then ( (vencimientos) => {

@@ -1,10 +1,4 @@
-//Clase para crear un objeto persona con los datos del turno.
-
-function hideInfo(item, event) {
-    event.preventDefault();
-    document.querySelector(item).classList.add('displayNone');
-}
-
+//CLASE PARA CREAR UN OBJETO PERSONA CON LOS DATOS DEL TURNO
 class Person {
     constructor (name, phone, topics, info, type, active, turn, date) {
         this.name = name;
@@ -36,7 +30,7 @@ fetch('./regUsers.json')
     turnos = turns;
 })
 
-//IMPLEMENTACIÓN DE LIBRERÍA FLATPICKR PARA SELECCIÓN Y LIMITACIÓN DE FECHAS DESDE CALENDARIO
+//IMPLEMENTACIÓN DE LIBRERÍA FLATPICKR PARA MANEJO DE FECHAS (PARA DELIMITAR HORARIOS Y DÍAS LABORALES)
 
 config = {
     enableTime: true,
@@ -74,40 +68,6 @@ function requestTurn() {
     let type = document.querySelector('#type').value;
     const persona = new Person (name, tel, cantTopics, meetingTopics, type, true, 0, date);
     return persona;
-}
-
-//EVENTO "PEDIR UN TURNO"
-
-let requestTurnButton = document.getElementById('requestTurnButton');
-requestTurnButton.addEventListener('click', () => {
-document.querySelector('#turnForm').classList.remove('displayNone');
-
-//TOMAR LOS DATOS DEL LOCAL STORAGE SI EL USUARIO YA ESTÁ LOGUEADO.
-
-    isUserLogged = localStorage.getItem('userInformation');
-    if (isUserLogged != null) {
-        let userLogged = JSON.parse(isUserLogged);
-        let form = document.querySelector('#turnForm');
-        form.name.value = userLogged.name;
-        form.type.value = userLogged.type;
-        form.tel.value = userLogged.phone;
-    } 
-    });
-
-//INCORPORACIÓN DE TURNOS AL ARRAY DE TURNOS - (PARA PROBAR, EL TURNO 1 SE ENCUENTRA CANCELADO, DEBERÍA DE NO ENCONTRARLO)
-
-function addTurn(turnsList, e) {
-    if (!isEmptyForm()) {
-        turnsList.push(requestTurn());
-        const turnID = turnsList.length;
-        turnsList[turnsList.length - 1].assignTurnId(turnID);
-        Swal.fire({
-            icon: 'info',
-            title: `Su número de turno es ${turnID}`,
-          });
-        hideInfo('#turnForm', e);
-        return turnsList;
-    }
 }
 
 // BUSQUEDA DE TURNOS
@@ -191,25 +151,84 @@ cantTemas.addEventListener('input', () => generateTopicCamps());
 let formIntroEvent = document.querySelector('#turnForm');
 formIntroEvent.addEventListener('keypress', (event) => event.keyCode == 13? event.preventDefault(): null);
 
-//CORROBORAR QUE NO SE PIDA EL TURNO SIN COMPLETAR TODOS LOS DATOS DEL FORMULARIO ******FALTA CONTROLAR FECHA********
+//EVENT LISTENERS DE PEDIR TURNO
 
-let emptyDate = 0; 
+let submitButton = document.getElementById('submitButton');
+submitButton.addEventListener('click', () => submitTurnForm(event));
 
-function isEmptyForm () {
-    let name = document.querySelector('#name').value;
-    let tel = document.querySelector('#tel').value;
-    let cantTopics = document.querySelector('#cantTopics').value;
-    if (name == "" || tel == ""  || cantTopics == 0) {
-        Swal.fire({
-            icon: 'warning',
-            title: `Complete todos los datos del formulario`,
-        }); 
-        return true}
-    else 
-        {return false}
+let requestTurnButton = document.getElementById('requestTurnButton');
+requestTurnButton.addEventListener('click', () => {
+    document.querySelector('#turnForm').classList.remove('displayNone');
+    //TOMAR LOS DATOS DEL LOCAL STORAGE SI EL USUARIO YA ESTÁ LOGUEADO.
+        isUserLogged = localStorage.getItem('userInformation');
+        if (isUserLogged != null) {
+            let userLogged = JSON.parse(isUserLogged);
+            let form = document.querySelector('#turnForm');
+            form.name.value = userLogged.name;
+            form.type.value = userLogged.type;
+            form.tel.value = userLogged.phone;
+        } 
+});
+
+let cancelBTN = document.getElementById('cancel');
+cancelBTN.addEventListener('click',(event) => {
+    event.preventDefault();
+    hideInfo('#turnForm');
+})
+
+//INCORPORACIÓN DE TURNOS AL ARRAY DE TURNOS - (PARA PROBAR, EL TURNO 1 SE ENCUENTRA CANCELADO, DEBERÍA DE NO ENCONTRARLO)
+
+function hideInfo(item) {
+    document.querySelector(item).classList.add('displayNone');
 }
 
-// HISTORIAL DE TURNOS - EL IDENTIFICADOR PARA LOS TURNOS ES EL NÚMERO DE TELÉFONO PROPORCIONADO
+function addTurn(turnsList) {
+    turnsList.push(requestTurn());
+    const turnID = turnsList.length;
+    turnsList[turnsList.length - 1].assignTurnId(turnID);
+    Swal.fire({
+        icon: 'info',
+        title: `Su número de turno es ${turnID}`,
+        });
+    hideInfo('#turnForm');
+    return turnsList;
+}
+
+//BORRAR LOS CAMPOS DEL FORMULARIO UNA VEZ PEDIDO EL TURNO
+
+function resetTurnForm() {
+
+};
+
+//VALIDACIÓN DE CAMPOS VACÍOS ANTES DE ENVIAR EL FORMULARIO
+
+function turnformValidation() {
+    const nm = document.querySelector('#name').value;
+    const tdate = document.querySelector('#turnDate').value;
+    const tel = document.querySelector('#tel').value;
+    const canT = document.querySelector('#cantTopics').value;
+    let validation1 = nm !== "" && tdate !== "" && tel !== ""  && canT !== 0
+    let validation2 = true;
+    if (canT) {
+        for (i = 1; i <= canT; i++) {
+            if (document.getElementById(`tema${i}`).value == "") {validation2 = false};
+        }
+    } 
+    const validation = validation1 && validation2
+    return validation;
+}
+
+function submitTurnForm(event){
+    event.preventDefault();
+    const val = turnformValidation();
+    val? addTurn(turnos) : Swal.fire({
+        icon: 'warning',
+        title: `Complete todos los datos del formulario`,
+    }); 
+    val && resetTurnForm();
+}
+
+// HISTORIAL DE TURNOS (EL IDENTIFICADOR PARA LOS TURNOS ES EL NÚMERO DE TELÉFONO)
 
 let turnsHistBTN = document.querySelector('#turnsHistBTN');
 turnsHistBTN.addEventListener('click', () => {
